@@ -1,7 +1,14 @@
 
 import math
 import numpy as np
-import Cartesian2
+import cartesian2 as c2
+import abstractspawncontroller as abs_spwn_ctrl
+import shapemanager as sm
+import pathfinder as pf 
+import polar2 as p2 
+import abstractrng as abs_rng
+import airspacestats as air_spc_stat
+
 #from Shapes import ShapeManager,AbstractShape
 
 
@@ -9,9 +16,9 @@ import Cartesian2
 class Airspace:
     def __init__(self, 
                  all_aircrafts:list, 
-                 boundary:Cartesian2, 
-                 spawn_controller:AbstractSpawnController, 
-                 restricted_areas:ShapeManager, 
+                 boundary:c2.Cartesian2, 
+                 spawn_controller:abs_spwn_ctrl.AbstractSpawnController, 
+                 restricted_areas:sm, 
                  waypoints:PathFinder, 
                  maximum_aircraft_acceleration:Polar2,
                  maximum_aircraft_speed, 
