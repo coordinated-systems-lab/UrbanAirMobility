@@ -10,17 +10,15 @@ class AircraftStats():
         self.unique_id = unique_id
         self.ac_encountered = ac_encountered
 
-#need to check and understand if these functions are class methods or are they regular functions 
-#also need to learn can these functions be used in some other script where AircraftStats class are being used
-#how can I use functions defined in this script in other scripts - possible answer -> header files check python header files
-def getNormalizedRouteLength(acs:AircraftStats):
-    return acs.distance_traveled / acs.ideal_distance
-    
-def getAverageVelocity(acs:AircraftStats):
-    return acs.distance_traveled/acs.time_elapsed
-    
-def getNMACPerSecond(acs:AircraftStats):
-    return acs.num_nmac / acs.time_elapsed
+    #we dont need the factory function since default values of AircraftStats obj sets its attributes to zero
+    def getNormalizedRouteLength(self):
+        return self.distance_traveled / self.ideal_distance
+        
+    def getAverageVelocity(self):
+        return self.distance_traveled/self.time_elapsed
+        
+    def getNMACPerSecond(self):
+        return self.num_nmac / self.time_elapsed
     
     
     
