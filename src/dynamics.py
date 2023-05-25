@@ -1,6 +1,7 @@
 import math
 import cartesian2 as c2 
 import polar2 as p2 
+import convertcoordinatesystem as ccs
 
 class Dynamics:
     def __init__(self,
@@ -24,7 +25,7 @@ class Dynamics:
             self.velocity.r = -self.velocity.r
             self.velocity.theta = self.velocity.theta - math.pi
 
-        self.position += toCartesian(self.velocity) * timestep
+        self.position += ccs.toCartesian(self.velocity) * timestep
 
     def __str__(self):
         return f'Pos {self.position}, Vel {self.velocity}, Acceleration {self.acceleration}'
