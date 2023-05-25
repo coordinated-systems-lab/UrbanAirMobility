@@ -3,7 +3,10 @@ import cartesian2 as c2
 import polar2 as p2 
 
 class Dynamics:
-    def __init__(self, position:c2.Cartesian2, velocity:p2.Polar2, acceleration:p2.Polar2):
+    def __init__(self,
+                 position:c2.Cartesian2,
+                 velocity:p2.Polar2,
+                 acceleration:p2.Polar2):
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
