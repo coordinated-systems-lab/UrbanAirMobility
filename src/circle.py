@@ -1,86 +1,37 @@
-# depends on carteisan 2, AbstractShape.jl
+import abstractshape as abs_shp
+import cartesian2 as c2
+import numpy as np
 
-# Additionally, it must define the following:
-#   Relevant geometry - position, size, etc
-#   Sampling distributions 
-#   Clip = a bool of whether a sampled point is clipped to gurantee it is within the shape or not
-#       For example, a standard normal distribution may be the internal sampling distribution, which can technically output a point from -inf to inf.
-#       Therefore, we may want to clip the points to always be within the shape
-struct Circle <: AbstractShape
-    # geometry
-    center_point::Cartesian2
-    radius::AbstractFloat
+class Circle(abs_shp.AbstractShape):
+    def __init__(self, center_ponint:c2.Cartesian2, radius:float, r_distribution, angle_distribution, clip:bool):
+        # r_distribution/angle_distribution = np.random.random_sample() or np.random.binomial() or ...... choose any from numpy 
+        self.center_point = center_ponint
+        self.radius = radius
+        self.r_distribution = r_distribution
+        self.angle_distribution = angle_distribution
+        self.clip = clip
 
-    # distributions for sampling. Note we will call rand(your_distribution) to get a random value. See Distributions.jl for helpful ones.
-    # Default distribution is uniform random
-    r_distribution
-    angle_distribution
-
-    # to clip or not
-    clip::Bool
-end
-
-
-function Circle(center_point::Cartesian2, 
-                radius::AbstractFloat; 
-                r_distribution=Uniform(0.0, radius), 
-                angle_distribution=Uniform(0.0, 2pi), 
-                clip=false
-                )
-    @assert radius >= 0.0
-    return Circle(center_point, radius, r_distribution, angle_distribution, clip)
-end
-
-
-# This function finds the nearest point to "point" along the edge of the shape s. 
-# it also returns the distance from that point to the nearest point. If the point is outside the shape, the distance is positive
-# if the point is inside the shape, the distance is negative
-function getNearestPointOnEdge(S::Circle, point::Cartesian2)
-    # get vector from our point to center of circle
-    vector = S.center_point - point
-
-    # get distance
-    distance_to_center = Magnitude(vector) # positive always
-    distance_to_edge = distance_to_center - S.radius # positive if outside, negative if inside
-
-    # get point
-    unit_vector = vector * (1.0/ Magnitude(vector))
-    edge_point = point + unit_vector * distance_to_edge
+    @classmethod
+    #factory function for standard circle 
+    def circle(cls,center_point:c2.Cartesian2, radius:float):
+        assert radius >= 0 
+        return cls(center_point, radius, radius * np.random.random_sample(), 2*np.pi * np.random.random_sample(), False)
     
-    return edge_point, distance_to_edge
-end
+    def getNearestPointOnEdge(self, point:c2.Cartesian2):
+        vector = self.center_point - point
 
-# This function samples a point from the shape randomly. The internal distribution should be specified in the constructor of a given shape
-# this should return a Cartesian2 point
-# any randomness must use the RNG
-# clip if Clip == true
-function samplePoint(S::Circle, rng)
-    # random radius and angle according to provided distros
-    r = rand(rng, S.r_distribution)
-    angle = rand(rng, S.angle_distribution)
+        distance_to_center = c2.Cartesian2.__abs__(vector)
+        distance_to_edge = distance_to_center - self.radius
 
-    # clip
-    if S.clip
-        r = clip(r, -S.radius, S.radius)
-        # note angle doesnt matter since they repeat basically and we are about to take sin and cos
-    end
+        unit_vector = vector * (1/ c2.Cartesian2.__abs__(vector))
+        edge_point =  point + unit_vector * distance_to_edge
 
-    # convert to x,y
-    x = r * cos(angle)
-    y = r * sin(angle)
-    return Cartesian2(x + S.center_point.x, y + S.center_point.y)
-end
+        return edge_point, distance_to_edge
+    
+    def samplePoint(self, rng):
+        r = self.r_distribution
+        angle = self.angle_distribution
 
-
-# this function should use pyplot to plot the shape
-function plotShape(S::Circle, ax, color, ls)
-    circle1 = plt.Circle((S.center_point.x, S.center_point.y), S.radius, color=color, fill=false, ls=ls)
-    ax.add_patch(circle1)
-end
-
-# this function returns the area of the shape.
-# if the shape does not have a fixed border (IE for a gaussian distribution which can in theory return a point anywhere between -inf and inf)
-# Then decide on a relevant size. Such as the area of which 95% of spawns will be or something like this
-function getArea(S::Circle)
-    return S.radius^2 * pi 
-end
+        if self.clip :
+            
+    

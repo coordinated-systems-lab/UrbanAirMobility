@@ -10,9 +10,14 @@ import dynamics as dcs
 class Aircraft:
     
     #constructor funciton of aircraft class, instance variables (these only belong to an instance of Aircraft object)
-    def __init__(self,dynamic:dcs.Dynamics , destinations:List[c2.Cartesian2], max_acceleration:p2.Polar2, max_velocity, stats:acs.AircraftStats): #I think arrival radius is aircraft stats type obj - check please
+    def __init__(self,
+                 dynamic:dcs.Dynamics ,
+                 destinations:List[c2.Cartesian2],
+                 max_acceleration:p2.Polar2,
+                 max_velocity,
+                 stats:acs.AircraftStats): #I think arrival radius is aircraft stats type obj - check please
         self.dynamic = dynamic 
-        self.destination = destinations
+        self.destinations = destinations
         self.max_acceleration = max_acceleration
         self.max_velocity = max_velocity
         self.stats = stats
@@ -61,23 +66,23 @@ class Aircraft:
 
     #return if we have arrived to the next destinantion, and the final destinations!
     def  hasArrived(self, acceptable_arrival_distance):
-        distance = self.destination[0] - self.dynamic.position
-        magnitude = abs(distance) ## is Magnitude a user defined method or built-in of Julia ? 
+        distance = self.destinations[0] - self.dynamic.position
+        magnitude = c2.Cartesian2.__abs__(distance) ## is Magnitude a user defined method or built-in of Julia ? 
         haveArrivedNext = magnitude <= 5.0 * acceptable_arrival_distance # this was a TODO on the legacy code base. Legacy -> TODO 3.0 times arrival distance
-        haveArrivedFinal = magnitude <= acceptable_arrival_distance and len(self.destination) == 1 
+        haveArrivedFinal = magnitude <= acceptable_arrival_distance and len(self.destinations) == 1 
         return haveArrivedNext, haveArrivedFinal
     
     def goToNextDestination(self):
-        if len(self.destination) > 1:
-            self.destination.pop(0)
-        return self.destination[0]
+        if len(self.destinations) > 1:
+            self.destinations.pop(0)
+        return self.destinations[0]
     
     def updateStatistics(self, timestep):
         self.stats.time_elapsed += timestep
         self.stats.distance_traveled += timestep * self.dynamic.velocity.r
     
     def show(self):
-        print(self.dynamic, ", Dest", self.destination)
+        print(self.dynamic, ", Dest", self.destinations)
         
             
         

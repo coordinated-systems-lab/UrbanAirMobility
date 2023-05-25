@@ -1,5 +1,5 @@
 class AirspaceStats:
-    def __init__(self,time = [],number_aircraft = [],number_NMAC = [],arrived_ac) = []:
+    def __init__(self,time = [],number_aircraft = [],number_NMAC = [],arrived_ac = []):
         self.time = time
         self.number_aircraft = number_aircraft
         self.arrived_ac = arrived_ac

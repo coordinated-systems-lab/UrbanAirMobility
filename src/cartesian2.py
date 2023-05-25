@@ -25,7 +25,7 @@ class Cartesian2:
             return True
     def __abs__(self):
         return (self.x**2 + self.y**2)**0.5
-    def angel(self):
+    def angle(self):
         return math.atan((self.y/self.x))
     def __str__(self) -> str:
         return 'x = {self.x}, y={self.y}'

@@ -6,27 +6,30 @@ import abstractspawncontroller as abs_spwn_ctrl
 import shapemanager as sm
 import pathfinder as pf 
 import polar2 as p2 
-import abstractrng as abs_rng
-import airspacestats as air_spc_stat
+import airspacestats as acs
+import aircraft as act
+from spawnfunction import ego_spawn_function
+import dynamics as dcs
 
+from typing import List, Any
 #from Shapes import ShapeManager,AbstractShape
 
 
 
 class Airspace:
     def __init__(self, 
-                 all_aircrafts:list, 
-                 boundary:c2.Cartesian2, 
-                 spawn_controller:abs_spwn_ctrl.AbstractSpawnController, 
-                 restricted_areas:sm, 
-                 waypoints:PathFinder, 
-                 maximum_aircraft_acceleration:Polar2,
+                 all_aircrafts: List[act.Aircraft], #not sure if numpy's ndarray would work, since this might be a mutable sequence, needs checking 
+                 boundary: c2.Cartesian2, 
+                 spawn_controller: abs_spwn_ctrl.AbstractSpawnController, 
+                 restricted_areas: sm.ShapeManger, 
+                 waypoints: pf.PathFinder, 
+                 maximum_aircraft_acceleration: p2.Polar2,
                  maximum_aircraft_speed, 
                  detection_radius, 
-                 arrival_radius, 
-                 rng:AbstractRNG, 
-                 stats:AirspaceStats,
-                 create_ego_aircraft:bool = True):
+                 arrival_radius,
+                 stats: acs.AirspaceStats,
+                 rng = np.random.default_rng(seed=123), 
+                 create_ego_aircraft: bool = True):
         
         self.all_aircraft = all_aircrafts
         self.boundary = boundary # this attribute needs a default value (10_000,10_000)
@@ -41,50 +44,64 @@ class Airspace:
         self.arrival_radius = arrival_radius #needs a value of 100
         
         self.stats = stats # this is belongs to the AirspaceStats class
-        #how to work the RNG 
-        all_aircrafts = list(0) # check source this needs to be corrected
-        #reset!() #this needs to be checked, check source
         self.rng = rng
     
-    @classmethod 
-    def default_airspace(cls):
-        all_aircraft = list()
-        stats = AirspaceStats()
-        return cls(all_aircraft, stats,
-                   boundary=(10000,10000),
-                   spawn_controller = ConstantSpawnController(boundary,create_ego_aircraft),
-                   create_ego_aircraft = True,
-                   rng = AbstractRNG,
-                   restricted_area = ShapeManager(),
-                   waypoints = PathFinder(),
-                   maximum_aircraft_acceleration = Polar2(3,math.pi*2/10),
-                   maximum_aircraft_speed = 50,
-                   detection_radius = 1000,
-                   arrival_radius = 100,
-        )
     
+    
+    
+    @classmethod 
+    def default_airspace(cls,
+                        stats: acs.AirspaceStats,
+                        all_aircrafts: List[act.Aircraft], #not sure if numpy's ndarray would work, since this might be a mutable sequence, needs checking 
+                        boundary: c2.Cartesian2 = c2.Cartesian2(10000,10000), 
+                        spawn_controller: abs_spwn_ctrl.AbstractSpawnController = abs_spwn_ctrl.ConstantSpawnRateController(boundary, create_ego_aircraft), #need to define ConstantSpawnRateController in abstractspawncontroller.py 
+                        restricted_areas: sm.ShapeManger = sm.ShapeManger(), 
+                        waypoints: pf.PathFinder = pf.PathFinder(), #need to provide constructor values
+                        maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3,2 * math.pi/ 10),
+                        maximum_aircraft_speed = 50, 
+                        detection_radius = 1000, 
+                        arrival_radius = 100,
+                        rng = np.random.default_rng(seed=123), 
+                        create_ego_aircraft: bool = True):
+        
+        all_aircrafts = []
+        stats = acs.AirspaceStats()
+
+
+        return cls(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
+    
+
+
+
     def createEgoAircraft(self):
-        assert len(Airspace.all_aircraft) == 0
+        assert len(self.all_aircraft) == 0
         #note ego is hard coded to anywhere and go 5000 meters
-        start, destination = ego_spawn_function(self.boundary, Cartesian2(0,0), self.detection_radius, self.arrival_radius, self.rng)
-        initial_velocity = Polar2(self.maximum_aircraft_speed/2, rand(self.rng, Uniform(0.0,2*math.pi))) # rand and Uniform are functions that needs to be passed from numpy 
-        initial_acceleration = Polar2(0.0, 0.0)
+        start, destination = ego_spawn_function(self.boundary, c2.Cartesian2(0,0), self.detection_radius, self.arrival_radius, self.rng)
+        initial_velocity = p2.Polar2(self.maximum_aircraft_speed/2, np.pi * np.random.random_sample())  
+        initial_acceleration = p2.Polar2(0.0, 0.0)
         
-        ac = Aircraft(Dynamics(start, initial_velocity, initial_acceleration, list(destination), self.maximum_aircraft_acceleration, self.maximum_aircraft_speed, self.arrival_radius))
-        self.all_aircrafts.append(ac) #
-        
-        
+        ac = act.Aircraft(dcs.Dynamics(start, initial_velocity, initial_acceleration), list(destination), self.maximum_aircraft_acceleration, self.maximum_aircraft_speed, self.arrival_radius)
+        self.all_aircraft.append(ac) 
         
         
-    def createAircraft(self, source:Cartesian2, destination:Cartesian2):
-        destinations = findPath(self.waypoints, source, destination, self.rng)
         
-        initial_velocity = Polar2(self.maximum_aircraft_speed/2, rand(self.rng, Uniform(0.0, 2*math.pi))) #
         
-        ac = Aircraft(Dynamics(source,initial_velocity,initial_acceleration))
-        push!(self.all_aircraft, ac)
+    def createAircraft(self, source:c2.Cartesian2, destination:c2.Cartesian2):
+        destinations = pf.PathFinder.findPath(self.waypoints, source, destination, self.rng)
         
-    def findNearestIntruder(self, aircraft:Aircraft,):
+        initial_velocity = p2.Polar2(self.maximum_aircraft_speed/2, np.pi * np.random.random_sample()) #
+        initial_acceleration = p2.Polar2(0.0, 0.0)
+
+        ac = act.Aircraft(dcs.Dynamics(source,initial_velocity,initial_acceleration), destinations, self.maximum_aircraft_acceleration, self.maximum_aircraft_speed, self.arrival_radius)
+        self.all_aircraft.append(ac)
+        
+    
+    
+    
+    
+    
+    
+    def findNearestIntruder(self, act.Aircraft,):
         intruder = None
         intruder_distance = self.detection_radius
 

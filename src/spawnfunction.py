@@ -7,15 +7,18 @@
 #that way we can use any package as needed
 
 import numpy as np
+from cartesian2 import Cartesian2 as c2
+from polar2 import Polar2 as p2
+import convertcoordinatesystem as ccs
 
-def ego_spawn_function(boundary:Cartesian2, ego_location:Cartesian2, detection_radius, arrival_radius, rng):
+def ego_spawn_function(boundary:c2, ego_location:c2, detection_radius, arrival_radius, rng): #why is this function using so many inputs when only one is being used
     init_x = np.random.uniform(0,boundary.x) # need to check the data type, here init_x is float, julia outputs it to type rng
     init_y = np.random.uniform(0,boundary.y) # same as before, chk data type of 'rng'
     
-    dest_theta = np.random.uniform(0,2*np.pi)
-    dest_offset = toCartesian(Polar2(5000,dest_theta))
+    dest_theta = (2*np.pi) * np.random.random_sample()
+    dest_offset = ccs.toCartesian(p2(5000,dest_theta))
     
-    start = Cartesian2(init_x, init_y)
+    start = c2(init_x, init_y)
     destination = start + dest_offset
     
     return start, destination
