@@ -66,4 +66,43 @@ class Rectangle(Absshp):
             #calculate which triangle we are in, refer to diagram at the bottom 
             change_x = point.x - left
             #todo rename these variables 
-            y_value_of_slash_by_point = 
+            #y_value_of_slash_by_point = 
+    
+    #todo here the rng is not used like it was in the Julia code, refactor abstract class method and instance class method
+    def samplePoint(self, rng): 
+        #random x and y according to provided distributions
+        x = self.x_distribution
+        y = self.y_distribution
+
+        if self.clip:
+            x = np.clip(x, self.top_left.x, self.bottom_right.x)
+            y = np.clip(y, self.bottom_right.y, self.top_left.y)
+        
+        return c2.Cartesian2(x, y)
+    
+    def plotShape(self, ax, color, ls):
+        pass
+
+    def getArea(self):
+        area = (self.bottom_right.x - self.top_left.x) * (self.top_left.y - self.bottom_right.y)
+        return area
+    
+
+    #= Diagram for nearest point. Consider the following
+    # solid lines are the borders of the rectangle. Dotted lines denote regions of interest where the behavior of nearest point is consistent
+    # note the forward and backwards slashes (in dots) inside the rectangle
+
+#         .                     .
+#         .                     .
+#         .                     .
+# ....... ______________________ ...............
+#         |  .               .  |
+#         |     .         .     |        
+#         |         . .         |
+#         |         . .         |
+#         |      .       .      |
+#         |   .             .   |
+# ........|_____________________|................
+#         .                     .
+#         .                     .        
+#         .                     .
