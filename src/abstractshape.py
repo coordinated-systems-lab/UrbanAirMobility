@@ -9,6 +9,7 @@
 #       For example, a standard normal distribution may be the internal sampling distribution, which can technically output a point from -inf to inf.
 #       Therefore, we may want to clip the points to always be within the shape
 from abc import abstractmethod, ABC
+from typing import Tuple
 class AbstractShape(ABC):
 
     
@@ -20,7 +21,7 @@ class AbstractShape(ABC):
     # if the point is inside the shape, the distance is negative
 
     @abstractmethod
-    def getNearestPointOnEdge(self,point,):
+    def getNearestPointOnEdge(self,point,) -> Tuple: # ? what are the implications of expecting a tuple output 
         pass
 
 
