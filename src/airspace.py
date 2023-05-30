@@ -50,12 +50,12 @@ class Airspace:
     
     
     @classmethod 
-    def default_airspace(cls,
+    def airspace(cls,
                         stats: acs.AirspaceStats,
                         all_aircrafts: List[act.Aircraft], #not sure if numpy's ndarray would work, since this might be a mutable sequence, needs checking 
                         boundary: c2.Cartesian2 = c2.Cartesian2(10000,10000), 
                         spawn_controller: abs_spwn_ctrl.AbstractSpawnController = abs_spwn_ctrl.ConstantSpawnRateController(boundary, create_ego_aircraft), #need to define ConstantSpawnRateController in abstractspawncontroller.py 
-                        restricted_areas: sm.ShapeManger = sm.ShapeManger(), 
+                        restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(), 
                         waypoints: pf.PathFinder = pf.PathFinder(), #need to provide constructor values
                         maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3,2 * math.pi/ 10),
                         maximum_aircraft_speed = 50, 
