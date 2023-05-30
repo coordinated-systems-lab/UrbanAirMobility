@@ -1,4 +1,4 @@
-import shapemanager as sm, cartesian2 as c2, circle as cir, rectangle as rect, abstractspawncontroller as abs_spwn_ctrlr, aircraft as acft
+import shapemanager as sm, cartesian2 as c2, circle as cir, rectangle as rect, abstractspawncontroller as abs_spwn_ctrlr, aircraft as acft, helpers
 from typing import List, Generator, Tuple
 import random
 import numpy as np
@@ -49,7 +49,7 @@ class ConstantSpawnRateController(abs_spwn_ctrlr.AbstractSpawnController):
         return ret
     
     def setSpawnRate(self, spawns_per_km_squared_hours):
-        spawns_per_meter_squared_seconds = KMSquaredHourstoMSquaredSeconds(spawns_per_km_squared_hours)
+        spawns_per_meter_squared_seconds = helpers.km_sq_hrs_to_m_sq_secs(spawns_per_km_squared_hours) 
         spawns_per_second = spawns_per_meter_squared_seconds * self.sources.getArea()
         self.spawnrate_per_second = spawns_per_second
 
