@@ -36,7 +36,7 @@ class ShapeManger:
                     best_distance = some_distance
         return nearest_point, best_distance
     
-    def samplePoint(self, rng:Generator):
+    def samplePoint(self, rng):
         if len(self.shapes) == 0:
             raise RuntimeError ('NO shapes to sample from')
                     
