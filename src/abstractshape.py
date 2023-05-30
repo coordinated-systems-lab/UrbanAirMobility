@@ -10,6 +10,7 @@
 #       Therefore, we may want to clip the points to always be within the shape
 from abc import abstractmethod, ABC
 from typing import Tuple
+import cartesian2 as c2 
 class AbstractShape(ABC):
 
     
@@ -30,7 +31,7 @@ class AbstractShape(ABC):
     # any randomness must use the RNG
     # clip if Clip == true
     @abstractmethod
-    def samplePoint(self, rng,):
+    def samplePoint(self, rng,) -> c2.Cartesian2:
         pass
 
 
