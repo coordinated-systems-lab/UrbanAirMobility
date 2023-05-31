@@ -3,6 +3,7 @@ import cartesian2 as c2
 import random 
 import math 
 import numpy as np 
+from typing import Tuple
 
 class Circle(abs_shp.AbstractShape):
     def __init__(self, center_ponint:c2.Cartesian2, radius:float, r_distribution, angle_distribution, clip:bool):
@@ -21,7 +22,7 @@ class Circle(abs_shp.AbstractShape):
         #             using uniform dist choose a val between 0 and radius,  
         return cls(center_point, radius, radius * random.uniform(0,radius), random.uniform(0, 2*math.pi), False)
     
-    def getNearestPointOnEdge(self, point:c2.Cartesian2):
+    def getNearestPointOnEdge(self, point:c2.Cartesian2) -> Tuple[c2.Cartesian2, float]:
         vector = self.center_point - point
 
         distance_to_center = c2.Cartesian2.__abs__(vector)
