@@ -10,8 +10,8 @@ class PathFinder:
 
     #finish this properly 
     @classmethod
-    def pathfinder_1(cls):
-        pass 
+    def pathfinder(cls):
+        pass  
     
 
     def findNearestPointIndex(self, point):
