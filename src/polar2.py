@@ -1,7 +1,7 @@
 import math
 
 class Polar2:
-    def __init__(self, r , theta):
+    def __init__(self, r:float , theta:float):
         self.r = r
         self.theta = theta
     
