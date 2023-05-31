@@ -37,7 +37,7 @@ class ConstantSpawnRateController(abs_spwn_ctrlr.AbstractSpawnController):
                                     rng: Generator):
         ac_to_spawn = int(self.spawnrate_per_second * timestep) # ? need to make sure this is proper representation of julia code 
 
-        ret :List[Tuple[c2.Cartesian2, c2.Cartesian2]] = [(c2.Cartesian2(None,None), c2.Cartesian2(None,None))]
+        ret :List[Tuple[c2.Cartesian2, c2.Cartesian2]] = []
 
         for i in range(ac_to_spawn):
             start = self.sources.samplePoint(rng=np.random.default_rng()) + ego_position
