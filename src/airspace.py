@@ -53,7 +53,6 @@ class Airspace:
     @classmethod 
     def airspace(cls,
                         stats: acs.AirspaceStats,
-                        spawn_controller: cnst_spwn_ctrlr.ConstantSpawnRateController,
                         boundary: c2.Cartesian2 = c2.Cartesian2(10000,10000),  
                         restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(), 
                         waypoints: pf.PathFinder = pf.PathFinder.pathfinder(), # TODO this will be fixed automatically after fixing pathfinder.py 
@@ -68,10 +67,9 @@ class Airspace:
         all_aircrafts:List[act.Aircraft] = []
         stats = acs.AirspaceStats()
         
-        # ? reset is defined later in the code
-        # TODO - first determine what kind of method is reset, then complete the method call
-        #reset()
-
+        # TODO - how to implement reset inside a factory function
+        # ? reset()
+        
 
         return cls(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
     
@@ -137,9 +135,6 @@ class Airspace:
         if restricted_distance < 0.0:
             # get unit vector in the direction from edge to the AC
             vector_from_edge_to_ac = aircraft.dynamic.position - nearest_restricted
-            
-            # ? multiplying a cartesian with a float is unknown to Python
-            # TODO need to find a way to resolve this issue
             unit_vector:c2.Cartesian2 = vector_from_edge_to_ac * (1.0 / abs(vector_from_edge_to_ac))  
         
             #use unit vector to create a point on the opposite side of the ac, 50 meters away
@@ -268,8 +263,7 @@ class Airspace:
             else:
                 self.all_aircraft[i].setAcceleration(accelerations[i])
     
-    
-    # TODO complete step    
+   
     def step(self, timestep, current_time, nmac_range):
         # move through time 
         for ac in self.all_aircraft:
@@ -320,7 +314,8 @@ class Airspace:
                 num_ac -= 1
                 i -= 1 
         
-        
+        self.stats.add_stats(current_time, len(self.all_aircraft), num_NMAC_this_timestep, list_ac)
+
 
             
 
