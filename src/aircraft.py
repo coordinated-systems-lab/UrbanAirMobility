@@ -24,7 +24,7 @@ class Aircraft:
 
     #factory function 
     @classmethod
-    def aircraft_(cls,dynamic:dcs.Dynamics, destinations:List[c2.Cartesian2], max_acceleration:p2.Polar2, max_velocity, arrival_radius):
+    def aircraft(cls,dynamic:dcs.Dynamics, destinations:List[c2.Cartesian2], max_acceleration:p2.Polar2, max_velocity, arrival_radius):
         stats = acs.AircraftStats((abs(dynamic.position) - destinations[-1]),{}) - arrival_radius
         return cls(dynamic,destinations,max_acceleration,max_velocity,stats)
     
