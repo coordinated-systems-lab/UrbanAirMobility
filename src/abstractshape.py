@@ -48,5 +48,5 @@ class AbstractShape(ABC):
     # Then decide on a relevant size. Such as the area of which 95% of spawns will be or something like this
 
     @abstractmethod
-    def getArea(self):
+    def getArea(self) -> float:
         pass
