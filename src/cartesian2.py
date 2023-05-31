@@ -4,7 +4,7 @@ import math
 
 
 class Cartesian2:
-    def __init__(self, x,y):
+    def __init__(self, x:float|int,y:float|int):
         self.x = x
         self.y = y
     
@@ -16,7 +16,7 @@ class Cartesian2:
         new_x = self.x - a.x
         new_y = self.y - a.y
         return Cartesian2(new_x, new_y)
-    def __mul__(self,a):
+    def __mul__(self,a:float|int):
         new_x = self.x * a
         new_y = self.y * a
         return Cartesian2(new_x, new_y)
