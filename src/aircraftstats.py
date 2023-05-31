@@ -10,7 +10,11 @@ class AircraftStats():
         self.unique_id = unique_id
         self.ac_encountered = ac_encountered
 
-    #we dont need the factory function since default values of AircraftStats obj sets its attributes to zero
+    # factory function for creating aircraftstats for aircraft 
+    @classmethod
+    def aircraftstats(cls, ideal_distance):
+        return cls(ideal_distance,{}, uuid.uuid1(),0,0,0 )
+    
     def getNormalizedRouteLength(self):
         return self.distance_traveled / self.ideal_distance
         
