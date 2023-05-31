@@ -7,7 +7,7 @@ class AbstractSpawnController(ABC):
     
     # must return a vector of Tuple of cartesian 2 points
     @abstractmethod
-    def getSourceAndDestinations(self, timestep, current_time, aircreaft, ego_position, rng,) -> List[object]:
+    def getSourceAndDestinations(self, timestep, current_time, aircraft, ego_position, rng,) -> List[object]:
         pass 
 
     @abstractmethod
