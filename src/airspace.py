@@ -271,7 +271,59 @@ class Airspace:
     
     # TODO complete step    
     def step(self, timestep, current_time, nmac_range):
-        pass
+        # move through time 
+        for ac in self.all_aircraft:
+            ac.step(timestep,self.arrival_radius)
+        
+        num_NMAC_this_timestep = self.calculatenumNMAC(nmac_range, current_time)
+
+        #create new ac
+        #coordinates are the ego position if exists
+
+        coords = self.all_aircraft[1].dynamic.position if self.create_ego_aircraft else c2.Cartesian2(0,0)
+
+        #comment from Julia code
+        #determine how many to make. Is random between floor(spawnrate) and ceiling(spawnrate)
+        ac = self.spawn_controller.getSourceAndDestinations(timestep, current_time, self.all_aircraft, coords, self.rng)
+
+        #create all aircraft based on above number 
+        for start, destination in ac:
+            self.createAircraft(start, destination)
+        
+        #kill arrived aircraft 
+        #kill aircraft far from ego - MDP only 
+        num_ac = len(self.all_aircraft)
+        list_ac = []
+        for i in range(num_ac):
+            #do not kill ego sim needs to end
+            if self.create_ego_aircraft and (i == 0):
+                continue
+            if i > num_ac:
+                break
+
+            # all others can be killed 
+            # kill if the ac has arrived or if we are MDP and it is far away from ego () the we dont need to simulate it)
+            # if its arried locally, but not to its final destination, change its waypoint to the next waypoint 
+            ac = self.all_aircraft[i]
+            hasArrivedNext, hasArrivedFinal = ac.hasArrived(self.arrival_radius)
+            if hasArrivedFinal:
+                #update stats
+                list_ac.append(ac)
+                #delete it from list 
+                self.all_aircraft.pop(i)
+                
+                num_ac -= 1 
+                i -= 1
+
+            elif self.create_ego_aircraft and ((abs(ac.dynamic.position - self.all_aircraft[0].dynamic.position)) > self.detection_radius):
+                self.all_aircraft.pop(i)
+                num_ac -= 1
+                i -= 1 
+        
+        
+
+            
+
 
     def reset(self):
         self.all_aircraft = []
@@ -281,11 +333,31 @@ class Airspace:
     def __str__(self) -> str:
         f'num ac = {len(self.all_aircraft)}'
     
-    def calculatenumNMAC(self, nmac_range, current_time):
+    def calculatenumNMAC(self, nmac_range, current_time) -> int:
         num_ac = len(self.all_aircraft)
         num_nmac = 0
         # * the following code comparing aircraft[0] with aircraft[1],[2],.....
         # * then i moves forward to 1 and again comparision starts between aircraft[1] with aircraft[2], [3], ......
         # * this is essentially a mapping - perform an enumeration look for tricks on youtube and other places 
         for i in range(num_ac):
-            for j in i + 
+            for j in range(i+1, num_ac):
+                ac1 = self.all_aircraft[i]
+                ac2 = self.all_aircraft[j]
+                if abs(ac1.dynamic.position - ac2.dynamic.position) < nmac_range:
+                    # if time since we saw this ac last is less than 10 seconds, does not count as new collision!
+                    # If we have not seen this ac before, default value is -1000 so that this is always false and we proceed to the below
+                    if (current_time - ac1.stats.ac_encountered.get(ac2.stats.unique_id, -1000.0)) < 10:
+                        continue
+                    else:
+                        num_nmac += 1
+                        self.all_aircraft[i].stats.num_nmac += 1 
+                        self.all_aircraft[j].stats.num_nmac += 1
+                        # comments from julia code - 
+                        # remember to add this encounter to the first ac. Since the order of this list doesnt change,
+                        # we do not also need to add it to j
+                        ac1.stats.ac_encountered[ac2.stats.unique_id] = current_time
+        return num_nmac
+    
+
+    
+
