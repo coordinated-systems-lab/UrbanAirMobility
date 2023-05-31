@@ -8,18 +8,18 @@ class Dynamics:
                  position:c2.Cartesian2,
                  velocity:p2.Polar2,
                  acceleration:p2.Polar2):
-        self.position = position
-        self.velocity = velocity
-        self.acceleration = acceleration
+        self.position:c2.Cartesian2 = position
+        self.velocity:p2.Polar2 = velocity
+        self.acceleration:p2.Polar2 = acceleration
 
     def setacceleration(self, a:p2.Polar2):
         self.acceleration = a
     
     def step(self, timestep, max_speed = float('inf')):
-        self.velocity += self.acceleration * timestep
+        self.velocity.r += self.acceleration.r * timestep
 
-        if self.velocity > max_speed:
-            self.velocity = max_speed
+        if self.velocity.r > max_speed:
+            self.velocity.r = max_speed
         
         if self.velocity.r < 0.0:
             self.velocity.r = -self.velocity.r
