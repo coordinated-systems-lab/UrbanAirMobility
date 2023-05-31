@@ -2,7 +2,7 @@ from cartesian2 import Cartesian2 as C2
 from abstractshape import AbstractShape as AbsShp 
 from circle import Circle as Circ
 from rectangle import Rectangle as Rect
-from typing import List, Generator
+from typing import List, Tuple
 import math
 import random
 import numpy as np
@@ -21,12 +21,12 @@ class ShapeManger:
     def addShape(self, s:AbsShp, weight:float = 1):
         self.shapes.append(s)
         self.weights.append(weight)
-        self.total_area += getArea(s)
+        self.total_area += s.getArea()
     
     # TODO Need to change the name of this method, it causes ambiguity within code and does not explain what this method does
-    def getNearestPointOnEdge(self, shapes:List[*AbsShp], point:C2):
-        nearest_point = object()  
-        best_distance: C2 | float = math.inf
+    def getNearestPointOnEdge(self, shapes:List[*AbsShp], point:C2) -> Tuple[C2, float] :
+        nearest_point:C2 = C2(None, None)  
+        best_distance:float = math.inf
 
         if self != object:
             for shape in shapes:
