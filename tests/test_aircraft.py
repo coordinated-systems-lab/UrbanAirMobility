@@ -1,4 +1,4 @@
-import aircraft as acft, dynamics as dcs, cartesian2 as c2, polar2 as p2
+import src.aircraft as acft, src.dynamics as dcs, src.cartesian2 as c2, src.polar2 as p2
 import math
 
 error = 0.001
