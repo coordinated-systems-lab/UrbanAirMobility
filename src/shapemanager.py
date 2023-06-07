@@ -24,7 +24,7 @@ class ShapeManger:
         self.total_area += s.getArea()
     
     # TODO Need to change the name of this method, it causes ambiguity within code and does not explain what this method does
-    def getNearestPointOnEdge(self, shapes:List[*AbsShp], point:C2) -> Tuple[C2, float] :
+    def getNearestPointOnEdge(self, shapes:List[AbsShp], point:C2) -> Tuple[C2, float] :
         nearest_point:C2 = C2(None, None)  
         best_distance:float = math.inf
 
