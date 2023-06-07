@@ -7,7 +7,7 @@ import math
 import random
 import numpy as np
 class ShapeManger:
-    def __init__(self, shapes:List[*AbsShp], weights:List[float], total_area:float):
+    def __init__(self, shapes:List[AbsShp], weights:List[float], total_area:float):
         self.shapes = shapes
         self.weights = weights 
         self.total_area = total_area
