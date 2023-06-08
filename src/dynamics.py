@@ -1,7 +1,7 @@
 import math
-import cartesian2 as c2 
-import polar2 as p2 
-import convertcoordinatesystem as ccs
+import src.cartesian2 as c2 
+import src.polar2 as p2 
+import src.convertcoordinatesystem as ccs
 
 class Dynamics:
     def __init__(self,

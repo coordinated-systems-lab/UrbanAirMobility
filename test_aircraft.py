@@ -38,3 +38,5 @@ t1 = acft.Aircraft(dcs.Dynamics(c2.Cartesian2(0,0),p2.Polar2(0,0),p2.Polar2(0,0)
                    100)
 
 assert t1.hasArrived(100) == (True, False)
+
+print('All aircraft test complete')
