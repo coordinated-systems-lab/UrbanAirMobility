@@ -1,6 +1,6 @@
 #Dependencies Cartesian2, Polar2
-import src.cartesian2 as c2 
-import src.polar2 as p2 
+import cartesian2 as c2 
+import polar2 as p2 
 
 
 def toPolar(a:c2.Cartesian2):

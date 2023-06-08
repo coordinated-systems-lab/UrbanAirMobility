@@ -1,10 +1,10 @@
 #for type hint
 from typing import List
 
-import src.cartesian2 as c2
-import src.polar2 as p2
-import src.aircraftstats as acs
-import src.dynamics as dcs
+import cartesian2 as c2
+import polar2 as p2
+import aircraftstats as acs
+import dynamics as dcs
 
 
 class Aircraft:
