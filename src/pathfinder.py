@@ -56,6 +56,7 @@ class PathFinder:
         end_index = self.findNearestPointIndex(dest)
         
         ##this heuristic function is confusing 
+        @staticmethod
         def heuristic_f(index, end_index):
             distance_magnitude = c2.__abs__(self.points[index] - self.points[end_index]) + (0.1 * random.random()) ## check the uniform distribution definition from numpy 
             return distance_magnitude
