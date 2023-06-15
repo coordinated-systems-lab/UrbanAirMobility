@@ -50,12 +50,11 @@ class Airspace:
     
     
     
-    @classmethod 
-    def airspace(cls,
+    def airspace(self,
                         stats: acs.AirspaceStats,
                         boundary: c2.Cartesian2 = c2.Cartesian2(10000,10000),  
                         restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(), 
-                        waypoints: pf.PathFinder = pf.PathFinder.pathfinder(), # TODO this will be fixed automatically after fixing pathfinder.py 
+                        waypoints: pf.PathFinder = pf.PathFinder.pathfinder_empty(), 
                         maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3,2 * math.pi/ 10),
                         maximum_aircraft_speed = 50, 
                         detection_radius = 1000, 
@@ -67,11 +66,10 @@ class Airspace:
         all_aircrafts:List[act.Aircraft] = []
         stats = acs.AirspaceStats()
         
-        # TODO - how to implement reset inside a factory function
-        # ? reset()
+        self.reset()
         
-
-        return cls(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
+        return Airspace(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
+    
     
 
 
@@ -90,7 +88,7 @@ class Airspace:
         
         
     def createAircraft(self, source:c2.Cartesian2, destination:c2.Cartesian2):
-        destinations = pf.PathFinder.findPath(self.waypoints, source, destination, self.rng)
+        destinations = pf.PathFinder.findPath(self.waypoints, source, destination, self.rng) # type: ignore
         
         initial_velocity = p2.Polar2(self.maximum_aircraft_speed/2, np.pi * np.random.random_sample()) #
         initial_acceleration = p2.Polar2(0.0, 0.0)
@@ -99,13 +97,12 @@ class Airspace:
         self.all_aircraft.append(ac)
         
     
-    # TODO refactor 
     def findNearestIntruder(self, aircraft:act.Aircraft) -> Tuple[act.Aircraft, float] :
-        intruder : act.Aircraft 
         intruder_distance:float = self.detection_radius
 
         for possible_intruder in self.all_aircraft:
-            if type(possible_intruder) == type(aircraft):  
+            
+            if possible_intruder == aircraft:  
                 continue
 
             distance_away:float = abs(possible_intruder.dynamic.position - aircraft.dynamic.position)
@@ -113,7 +110,8 @@ class Airspace:
             if distance_away < intruder_distance:
                 intruder = possible_intruder
                 intruder_distance = distance_away
-        return intruder, intruder_distance
+
+        return intruder, intruder_distance #type: ignore
     
 
     def findNearestRestricted(self, aircraft:act.Aircraft,
@@ -195,9 +193,9 @@ class Airspace:
             has_intruder = 1
             
             # ? issue with type, Pylance is unable to explicitly define the type of intruder position
-            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta
+            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta # type: ignore
             
-            relative_velocity_of_intruder  = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity))
+            relative_velocity_of_intruder  = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity)) # type: ignore
             heading_of_intruder = relative_velocity_of_intruder.theta - aircraft.dynamic.velocity.theta
             velocity_of_intruder = relative_velocity_of_intruder.r
 
@@ -325,7 +323,7 @@ class Airspace:
         if self.create_ego_aircraft:
             self.createEgoAircraft()
 
-    def __str__(self) -> str:
+    def __str__(self):
         f'num ac = {len(self.all_aircraft)}'
     
     def calculatenumNMAC(self, nmac_range, current_time) -> int:
