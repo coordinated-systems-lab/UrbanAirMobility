@@ -1,9 +1,16 @@
+import aircraft as ac, aircraftstats as acstat
+
 class AirspaceStats:
     def __init__(self,time = [],number_aircraft = [],number_NMAC = [],arrived_ac = []):
         self.time = time
         self.number_aircraft = number_aircraft
         self.arrived_ac = arrived_ac
         self.number_NMAC = number_NMAC
+    
+    @classmethod
+    def airspacestats(cls):
+        return cls([],[],[],[])
+    
     
     def add_stats(self,current_time, current_num_ac, nmac_this_timestep, list_ac):
         self.time.append(current_time)
@@ -16,7 +23,7 @@ class AirspaceStats:
         route_len = 0 #this variable was named "len" in julia
         for items in self.arrived_ac:
             for ac in items:
-                route_len += getNormalizedRouteLength(ac.stats)
+                route_len += acstat.AircraftStats.getNormalizedRouteLength(ac.stats)
                 num_ac += 1
         return route_len/num_ac
                 
@@ -26,7 +33,7 @@ class AirspaceStats:
         
         for items in self.arrived_ac:
             for ac in items:
-                num_nmac_per_second += getNMACPerSecond(ac.stats)
+                num_nmac_per_second += acstat.AircraftStats.getNMACPerSecond(ac.stats)
                 num_ac += 1
         return num_nmac_per_second/num_ac
     
