@@ -10,19 +10,22 @@
 # The below function is a default pilot behavior. It goes straight to the destination, ignoring intruders.
 # Slight noise is added to make the aircraft swerve
 
+import polar2 as p2
 
-def default_pilot_function(max_acceleration:Polar2) :
+def default_pilot_function(max_acceleration:p2.Polar2) :
     def some_pilot_function(state,rng): # here 'rng' will need to call numpy to return a random number generator
         max_turn_rate = max_acceleration.theta
         deviation = state[0]
-        #deviation +=  ### check the source and convert to python using necessary methods
+        
+        # * python does not have a default clamp function, below we have python code that accomplishes the same 
         if (deviation >= -max_turn_rate) and (deviation <= max_turn_rate):
             turn_direction = deviation 
         elif deviation < -max_turn_rate:
             turn_direction = -max_turn_rate
         elif deviation > max_turn_rate:
             turn_direction = max_turn_rate
-        action = [0, turn_direction]
+        
+        action = [0, turn_direction] #type: ignore
         return action
     return some_pilot_function
 
