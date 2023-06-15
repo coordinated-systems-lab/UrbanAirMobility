@@ -73,9 +73,6 @@ class PathFinder:
         ret = []
 
         for node in path:
-            # src(e) -> returns the source node of edge e 
-
-            # index store the node value 
             ret.append(self.points[node])
         
         return ret 
