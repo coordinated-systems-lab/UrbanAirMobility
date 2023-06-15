@@ -52,28 +52,34 @@ class PathFinder:
         if len(self.points) == 0:
             return [dest]   
         
-        # start_index = self.findNearestPointIndex(start)
-        # end_index = self.findNearestPointIndex(dest)
+        start_index = self.findNearestPointIndex(start)
+        end_index = self.findNearestPointIndex(dest)
         
-        # ##this heuristic function is confusing 
-        # heuristic_f(index) = abs(self.points[index] - self.points[end_index] + np.random.Uniform(0,0.1)) ## check the uniform distribution definition from numpy 
-        # if self.edge_graph.ne == 0 :
-        #     return [self.points[start_index],dest]
-        # path = a_star(edge_graph,
-        #           start_index,
-        #           end_index,
-        #           weights,
-        #           heuristic_f)
-        # if len(path) == 0:
-        #     return [self.points[start_index],dest]
-        # ret:List[c2] = []
-        # for edge in path:
-        #     index = src(edge) ## what is this src function where is it defined
-        #     ret.append(self.points[index])
-        #     ret.append(self.points[dst(path[end])])
-        #     ret.append(dest)
-        #     return ret
-    
+        ##this heuristic function is confusing 
+        def heuristic_f(index, end_index):
+            distance_magnitude = c2.__abs__(self.points[index] - self.points[end_index]) + (0.1 * random.random()) ## check the uniform distribution definition from numpy 
+            return distance_magnitude
+        
+        if self.edge_graph.size() == 0:
+            return [self.points[start_index], dest]
+        
+        # TODO check the implementation of - astar_path, make sure the weight argument is correct 
+        path = netx.astar_path(self.edge_graph, start_index, end_index, heuristic_f, 'weight')
+
+        if len(path) == 0:
+            return [self.points[start_index], dest]
+        
+        ret = []
+
+        for node in path:
+            # src(e) -> returns the source node of edge e 
+
+            # index store the node value 
+            ret.append(self.points[node])
+        
+        return ret 
+
+
     
     def render(self):
         for point in self.points:
