@@ -23,14 +23,13 @@ class ShapeManger:
         self.weights.append(weight)
         self.total_area += s.getArea()
     
-    # TODO Need to change the name of this method, it causes ambiguity within code and does not explain what this method does
-    def getNearestPointOnEdge(self, shapes:List[AbsShp], point:C2) -> Tuple[C2, float] :
-        nearest_point:C2 = C2(None, None)  
+    def getNearestPointOnEdge(self, point:C2) -> Tuple[C2, float] :
+        nearest_point:C2 = C2(0, 0)  
         best_distance:float = math.inf
 
         if self != object:
-            for shape in shapes:
-                some_point, some_distance = shape.getNearestPointOnEdge(point) # ? need to confirm if this will work -> needs unit test, also need to see the implication of changing the abstract class method definition
+            for shape in self.shapes:
+                some_point, some_distance = shape.getNearestPointOnEdge(point) 
                 if C2.__abs__(some_distance) < abs(best_distance) :
                     nearest_point = some_point
                     best_distance = some_distance
@@ -40,19 +39,17 @@ class ShapeManger:
         if len(self.shapes) == 0:
             raise RuntimeError ('NO shapes to sample from')
                     
-        some_shape = random.choices(self.shapes, self.weights)
+        some_shape:AbsShp = random.choices(self.shapes, self.weights) #type: ignore 
 
-        # ? should we provide a default seed value to reduce variablity in the code during code tests/ unit test
-        return some_shape[0].samplePoint(rng=np.random.default_rng()) 
+        # * should we provide a default seed value to reduce variablity in the code during code tests/ unit test
+        return some_shape.samplePoint(rng=np.random.uniform()) 
     
     def sampleShapeIndex(self, rng = np.random.default_rng()):
         if len(self.shapes) == 0:
             raise RuntimeError ('NO shapes to sample from')
         
-        # ? if self.weights are floating point numbers then index will be a float, this will raise error down the line. But if weights are ints then it won't 
-        # TODO might need to convert the index to a integer, 
-        index = random.choices(self.weights, weights = self.weights)
-        return index[0]
+        index = random.choices(self.weights)
+        return index
     
     def isEmpty(self,):
         return len(self.shapes) == 0
