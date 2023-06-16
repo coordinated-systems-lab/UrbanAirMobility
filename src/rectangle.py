@@ -9,15 +9,15 @@ class Rectangle(Absshp):
     def __init__(self, top_left: c2.Cartesian2, bottom_right: c2.Cartesian2, x_distribution:float, y_distribution:float, clip:bool):
         self.top_left = top_left
         self.bottom_right = bottom_right
-        self.x_distribution = x_distribution
-        self.y_distribution = y_distribution
+        self.x_distribution = x_distribution #use np.random.uniform()
+        self.y_distribution = y_distribution #use np.random.uniform()
         self.clip = clip
 
     @classmethod
     def rectangle(cls,top_left:c2.Cartesian2, bottom_right:c2.Cartesian2,
                     clip = False):
-        x_distribution = random.uniform(top_left.x, bottom_right.x)
-        y_distribution = random.uniform(bottom_right.y, top_left.y)
+        x_distribution = np.random.uniform(top_left.x, bottom_right.x)
+        y_distribution = np.random.uniform(bottom_right.y, top_left.y)
 
         assert top_left.x <= bottom_right.x
         assert top_left.y >=bottom_right.y
@@ -32,7 +32,7 @@ class Rectangle(Absshp):
         right = self.bottom_right.x
         outside = False # whether or not our point is outside the rectangle. Defaults to false. If any dim is outside, then it becomes true.
 
-        #todo refactor with nearest point algorithm, maybe ??
+        # ? refactor with nearest point algorithm, maybe ??
         #find the nearest y value
         if point.x < left:
             x = left
@@ -64,13 +64,42 @@ class Rectangle(Absshp):
             vector_forward_slash = vector_forward_slash * (1/c2.Cartesian2.__abs__(vector_forward_slash))
 
             #calculate which triangle we are in, refer to diagram at the bottom 
+            
             change_x = point.x - left
-            #todo rename these variables 
-            #y_value_of_slash_by_point = 
+            y_value_of_slash_by_point = (vector_forward_slash * (point.x / vector_forward_slash.x)).y + bottom
+            above_forward_slash = point.y > y_value_of_slash_by_point
+
+            # ? why are we calculating change_x again ????
+            change_x = point.x - left
+            y_value_of_slash_by_point = (vector_back_slash * (point.x / vector_back_slash.x)).y + top
+            above_backward_slash = point.y > y_value_of_slash_by_point
+
+            #now that we know which triangle we are in, can just calculate x,y 
+            
+            if above_forward_slash and above_backward_slash: #top triangle 
+                x = point.x
+                y = top
+            elif above_forward_slash and (not above_backward_slash):
+                x = left
+                y = point.y
+            elif (not above_forward_slash) and above_backward_slash:
+                x = right 
+                y = point.y
+            else:
+                x = point.x
+                y = bottom
+            
+        edge_point = c2.Cartesian2(x,y)
+        distance_to_edge = c2.Cartesian2.__abs__(point - edge_point)
+        distance_to_edge = distance_to_edge if outside else -distance_to_edge
+
+        return edge_point, distance_to_edge
+        
     
-    #todo here the rng is not used like it was in the Julia code, refactor abstract class method and instance class method
-    def samplePoint(self, rng): 
-        #random x and y according to provided distributions
+    
+    def samplePoint(self): 
+        #random x and y according to provided distributions, 
+        #x_distribution and y_distribution should be something like np.random.uniform()
         x = self.x_distribution
         y = self.y_distribution
 
@@ -80,6 +109,7 @@ class Rectangle(Absshp):
         
         return c2.Cartesian2(x, y)
     
+    # TODO need to complete writing the method using matplotlib 
     def plotShape(self, ax, color, ls):
         pass
 
