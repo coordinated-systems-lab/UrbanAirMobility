@@ -34,8 +34,8 @@ class Circle(abs_shp.AbstractShape):
         return edge_point, distance_to_edge
     
     def samplePoint(self, rng = random.Random(123)): #using a defaut seed of 123, should this be a variable in future while we work with testing the simulator
-        r = self.r_distribution # := random.uniform(a,b) choose a random value for radius,r using uniform dist 
-        angle = self.angle_distribution #:= random.uniform(a,b) choose a random value for angle using uniform dist
+        r = self.r_distribution # := np.random.uniform(a,b) choose a random value for radius,r using uniform dist 
+        angle = self.angle_distribution #:= np.random.uniform(a,b) choose a random value for angle using uniform dist
 
         if self.clip :
             r = np.clip(r, -1 * self.radius, self.radius)
