@@ -65,11 +65,11 @@ class Airspace:
         spawn_controller = cnst_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller(boundary,create_ego_aircraft)
         all_aircrafts:List[act.Aircraft] = []
         stats = acs.AirspaceStats()
-        ##
+        
         airspace = cls(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
         airspace.reset()
-        return airspace
-        ## 
+        
+        return airspace 
         
         
     
