@@ -123,7 +123,7 @@ class Airspace:
         
         # * restricted_area is a shape manager type object built with factory function 
         restricted_areas = restricted_areas.shapemanager() # ? defining restricted areas as factory function of shapemanager with empty list for shapes, this will cause an issue, create issue in github 
-        nearest_restricted, restricted_distance = restricted_areas.getNearestPointOnEdge([],aircraft.dynamic.position)
+        nearest_restricted, restricted_distance = restricted_areas.getNearestPointOnEdge(aircraft.dynamic.position)
         
         # make sure nearest RA is within detection radius
         if restricted_distance > self.detection_radius:
