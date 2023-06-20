@@ -49,8 +49,8 @@ class Airspace:
     
     
     
-    
-    def airspace(self,
+    @classmethod
+    def airspace(cls,
                         stats: acs.AirspaceStats,
                         boundary: c2.Cartesian2 = c2.Cartesian2(10000,10000),  
                         restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(), 
@@ -65,10 +65,13 @@ class Airspace:
         spawn_controller = cnst_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller(boundary,create_ego_aircraft)
         all_aircrafts:List[act.Aircraft] = []
         stats = acs.AirspaceStats()
+        ##
+        airspace = cls(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
+        airspace.reset()
+        return airspace
+        ## 
         
-        self.reset()
         
-        return Airspace(all_aircrafts, boundary, spawn_controller, restricted_areas, waypoints, maximum_aircraft_acceleration,maximum_aircraft_speed,detection_radius,arrival_radius,stats,rng,create_ego_aircraft)
     
     
 
