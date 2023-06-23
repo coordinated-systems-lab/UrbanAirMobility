@@ -7,7 +7,7 @@ import math
 import random
 import numpy as np
 class ShapeManger:
-    def __init__(self, shapes:List[AbsShp], weights:List[float], total_area:float):
+    def __init__(self, shapes:List[AbsShp], weights:List[int], total_area:float):
         self.shapes = shapes
         self.weights = weights 
         self.total_area = total_area
@@ -18,7 +18,7 @@ class ShapeManger:
     def shapemanager(cls):
         return cls([],[],0)
     
-    def addShape(self, s:AbsShp, weight:float = 1):
+    def addShape(self, s:AbsShp, weight:int = 1):
         self.shapes.append(s)
         self.weights.append(weight)
         self.total_area += s.getArea()
@@ -48,7 +48,7 @@ class ShapeManger:
         if len(self.shapes) == 0:
             raise RuntimeError ('NO shapes to sample from')
         
-        index = random.choices(self.weights)
+        index = random.choice(self.weights)
         return index
     
     def isEmpty(self,):

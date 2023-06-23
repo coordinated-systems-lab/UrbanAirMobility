@@ -16,7 +16,7 @@ class AbstractSpawnController(ABC):
         pass
 
     @abstractmethod
-    def render(self, ax,):
+    def render(self, ax, *args):
         pass
 
     
