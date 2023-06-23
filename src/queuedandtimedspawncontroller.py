@@ -127,9 +127,9 @@ class QueuedAndTimedSpawnController(absspwnctrl.AbstractSpawnController):
             if type(self.sources.shapes[i]) == circle.Circle:
                 x = self.sources.shapes[i].center_point.x  # type: ignore
                 y = (
-                    self.sources.shapes[i].center_point.y
-                    + self.sources.shapes[i].radius
-                )  # type:ignore
+                    self.sources.shapes[i].center_point.y   # type: ignore
+                    + self.sources.shapes[i].radius         # type: ignore 
+                ) 
                 s = str(self.queues[i])
                 plt.text(x, y, s)
             elif type(self.sources.shapes[i]) == rectangle.Rectangle:
