@@ -9,11 +9,11 @@
 
 # The below function is a default pilot behavior. It goes straight to the destination, ignoring intruders.
 # Slight noise is added to make the aircraft swerve
-
+import random
 import polar2 as p2
 
 def default_pilot_function(max_acceleration:p2.Polar2) :
-    def some_pilot_function(state,rng): # here 'rng' will need to call numpy to return a random number generator
+    def some_pilot_function(state,rng = random.Random(123)): # here 'rng' will need to call numpy to return a random number generator
         max_turn_rate = max_acceleration.theta
         deviation = state[0]
         

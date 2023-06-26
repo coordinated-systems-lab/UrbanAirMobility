@@ -4,7 +4,7 @@ import random
 rng = random.random()
 
 def km_sq_hrs_to_m_sq_secs(spawnrate):
-    return spawnrate * (1/1000)**2 * (1/3600)
+    return spawnrate*(1/(3600*10**6))
 
 def makeInt(x, rng = rng):
     ret = int(x)

@@ -1,4 +1,5 @@
 import math
+import random
 import numpy as np
 import cartesian2 as c2
 import abstractspawncontroller as abs_spwn_ctrl
@@ -23,7 +24,7 @@ class Airspace:
             act.Aircraft
         ],  # not sure if numpy's ndarray would work, since this might be a mutable sequence, needs checking
         boundary: c2.Cartesian2,
-        spawn_controller: abs_spwn_ctrl.AbstractSpawnController,
+        spawn_controller,
         restricted_areas: sm.ShapeManger,
         waypoints: pf.PathFinder,
         maximum_aircraft_acceleration: p2.Polar2,
@@ -31,7 +32,7 @@ class Airspace:
         detection_radius: float,
         arrival_radius,
         stats: acs.AirspaceStats,
-        rng=np.random.default_rng(seed=123),
+        rng=random.Random(123),
         create_ego_aircraft: bool = True,
     ):
         self.all_aircraft = all_aircrafts
@@ -40,9 +41,7 @@ class Airspace:
             create_ego_aircraft  # this attibute needs a default value (true)
         )
         self.spawn_controller = spawn_controller  # this attribute needs a default ConstantSpawnController(boundary, create_ego_aircraft)
-        self.restricted_areas = (
-            restricted_areas  # this attribute needs to be set to class ShapeManger()
-        )
+        self.restricted_areas = sm.ShapeManger.shapemanager()
         self.waypoints = (
             waypoints  # this attribute needs to be set to class PathFinder()
         )
@@ -58,7 +57,8 @@ class Airspace:
     @classmethod
     def airspace(
         cls,
-        stats: acs.AirspaceStats,
+        spawn_controller = cnst_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller((c2.Cartesian2(10000,10000)),True),
+        stats: acs.AirspaceStats = acs.AirspaceStats(),
         boundary: c2.Cartesian2 = c2.Cartesian2(10000, 10000),
         restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(),
         waypoints: pf.PathFinder = pf.PathFinder.pathfinder_empty(),
@@ -66,16 +66,16 @@ class Airspace:
         maximum_aircraft_speed=50,
         detection_radius=1000,
         arrival_radius=100,
-        rng=np.random.default_rng(seed=123),
+        rng=random.Random(123),
         create_ego_aircraft: bool = True,
     ):
-        spawn_controller = (
-            cnst_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller(
-                boundary, create_ego_aircraft
-            )
-        )
+        # spawn_controller = (
+        #     cnst_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller(
+        #         boundary, create_ego_aircraft
+        #     )
+        # )
         all_aircrafts: List[act.Aircraft] = []
-        stats = acs.AirspaceStats()
+        #stats = acs.AirspaceStats()
 
         airspace = cls(
             all_aircrafts,
@@ -110,7 +110,7 @@ class Airspace:
         )
         initial_acceleration = p2.Polar2(0.0, 0.0)
 
-        ac = act.Aircraft(
+        ac = act.Aircraft.aircraft(
             dcs.Dynamics(start, initial_velocity, initial_acceleration),
             [destination],
             self.maximum_aircraft_acceleration,
@@ -127,7 +127,7 @@ class Airspace:
         )  #
         initial_acceleration = p2.Polar2(0.0, 0.0)
 
-        ac = act.Aircraft(
+        ac = act.Aircraft.aircraft(
             dcs.Dynamics(source, initial_velocity, initial_acceleration),
             destinations,
             self.maximum_aircraft_acceleration,
@@ -136,8 +136,9 @@ class Airspace:
         )
         self.all_aircraft.append(ac)
 
-    def findNearestIntruder(self, aircraft: act.Aircraft) -> Tuple[act.Aircraft, float]:
+    def findNearestIntruder(self, aircraft: act.Aircraft) -> Tuple[act.Aircraft | None, float]:
         intruder_distance: float = self.detection_radius
+        intruder = None 
 
         for possible_intruder in self.all_aircraft:
             if possible_intruder == aircraft:
@@ -151,7 +152,7 @@ class Airspace:
                 intruder = possible_intruder
                 intruder_distance = distance_away
 
-        return intruder, intruder_distance  # type: ignore
+        return intruder, intruder_distance 
 
     def findNearestRestricted(
         self, aircraft: act.Aircraft, restricted_areas: sm.ShapeManger, detection_radius
@@ -196,9 +197,7 @@ class Airspace:
     ):
         # calculate deviation
         destinantion_vector = aircraft.destinations[0] - aircraft.dynamic.position
-        deviation = (
-            c2.Cartesian2.angle(destinantion_vector) - aircraft.dynamic.velocity.theta
-        )
+        deviation = c2.Cartesian2.angle(destinantion_vector) - aircraft.dynamic.velocity.theta
 
         # find velocity
         velocity = aircraft.dynamic.velocity.r
@@ -242,11 +241,9 @@ class Airspace:
 
         else:
             has_intruder = 1
+            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta  
 
-            # ? issue with type, Pylance is unable to explicitly define the type of intruder position
-            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta  # type: ignore
-
-            relative_velocity_of_intruder = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity))  # type: ignore
+            relative_velocity_of_intruder = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity))  
             heading_of_intruder = (
                 relative_velocity_of_intruder.theta - aircraft.dynamic.velocity.theta
             )
@@ -270,18 +267,18 @@ class Airspace:
 
     @staticmethod
     def moveBetweenPiandMinusPi(angle):
-        angle = angle % 2 * math.pi
+        angle = angle % (2*math.pi)
         if angle < 0:
-            angle += 2 * math.pi
+            angle += 2*math.pi
         if angle >= math.pi:
-            angle -= 2 * math.pi
+            angle -= 2*math.pi
         return angle
 
     def normalize(self, state, max_speed, detection_radius):
         state[0] = self.moveBetweenPiandMinusPi(state[0])
         state[1] /= max_speed
         state[3] /= detection_radius
-        state[4] /= self.moveBetweenPiandMinusPi(state[4])
+        state[4] = state[4]/self.moveBetweenPiandMinusPi(state[4]) if state[4] != 0 else 0
         state[5] = self.moveBetweenPiandMinusPi(state[5])
         state[6] /= 2 * max_speed
 
@@ -354,14 +351,14 @@ class Airspace:
         # coordinates are the ego position if exists
 
         coords = (
-            self.all_aircraft[1].dynamic.position
+            self.all_aircraft[0].dynamic.position
             if self.create_ego_aircraft
             else c2.Cartesian2(0, 0)
         )
 
         # comment from Julia code
         # determine how many to make. Is random between floor(spawnrate) and ceiling(spawnrate)
-        ac = self.spawn_controller.getSourceAndDestinations(
+        ac = self.spawn_controller.getSourceandDestinations(
             timestep, current_time, self.all_aircraft, coords, self.rng
         )
 
@@ -372,6 +369,7 @@ class Airspace:
         # kill arrived aircraft
         # kill aircraft far from ego - MDP only
         num_ac = len(self.all_aircraft)
+        print('number of aircraft in airspace: ', num_ac) #! delete after debugging 
         list_ac = []
         for i in range(num_ac):
             # do not kill ego sim needs to end
@@ -383,6 +381,7 @@ class Airspace:
             # all others can be killed
             # kill if the ac has arrived or if we are MDP and it is far away from ego () the we dont need to simulate it)
             # if its arried locally, but not to its final destination, change its waypoint to the next waypoint
+            print('current i val -> ', i) #!delete after debugging
             ac = self.all_aircraft[i]
             hasArrivedNext, hasArrivedFinal = ac.hasArrived(self.arrival_radius)
             if hasArrivedFinal:

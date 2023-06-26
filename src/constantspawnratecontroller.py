@@ -3,7 +3,7 @@ from typing import List, Generator, Tuple
 import random
 import numpy as np
 
-class ConstantSpawnRateController(abs_spwn_ctrlr.AbstractSpawnController):
+class ConstantSpawnRateController():
     def __init__(self, sources:sm.ShapeManger, 
                  destinations:sm.ShapeManger,
                  spawnrate_per_second:float,
@@ -22,26 +22,33 @@ class ConstantSpawnRateController(abs_spwn_ctrlr.AbstractSpawnController):
         destinations = sm.ShapeManger.shapemanager()
 
         if is_mdp:
-            sources.addShape(cir.Circle.circle(c2.Cartesian2(0,0),1000)) # ? check Julia code -> why is r_distribution used ????
-            destinations.addShape(cir.Circle.circle(c2.Cartesian2(0,0),2000))
+            sources.addShape(cir.Circle.circle(c2.Cartesian2(0,0),1000,a=150))
+            destinations.addShape(cir.Circle.circle(c2.Cartesian2(0,0),2000,a=150))
         else:
             sources.addShape(rect.Rectangle.rectangle(c2.Cartesian2(0,boundary.y),c2.Cartesian2(boundary.x, 0)))
             destinations.addShape(rect.Rectangle.rectangle(c2.Cartesian2(0, boundary.y),c2.Cartesian2(boundary.x, 0)))
         return cls(sources, destinations, spawns_per_km_sq_hrs, relative_destination = is_mdp)
+    
+    @classmethod
+    def constantspawnratecontroller_1(cls, sources:sm.ShapeManger, destinations:sm.ShapeManger, spawns_per_km_squared_hours:float, relative_destination:bool):
+        spawns_per_meter_squared_seconds = helpers.km_sq_hrs_to_m_sq_secs(spawns_per_km_squared_hours)
+        spawns_per_seconds = spawns_per_meter_squared_seconds * sources.getArea()
+        return cls(sources, destinations, spawns_per_seconds, relative_destination)
+    
         
     def getSourceandDestinations(self, 
                                     timestep,
                                     current_time,
                                     aircraft:List[acft.Aircraft],
                                     ego_position:c2.Cartesian2,
-                                    rng: Generator):
-        ac_to_spawn = int(self.spawnrate_per_second * timestep) # ? need to make sure this is proper representation of julia code 
+                                    rng = np.random.default_rng()):
+        ac_to_spawn = int(self.spawnrate_per_second * timestep)  
 
         ret :List[Tuple[c2.Cartesian2, c2.Cartesian2]] = []
 
         for i in range(ac_to_spawn):
-            start = self.sources.samplePoint(rng=np.random.default_rng()) + ego_position
-            destination = self.destinations.samplePoint(rng = np.random.default_rng())
+            start = self.sources.samplePoint(rng) + ego_position
+            destination = self.destinations.samplePoint(rng)
 
             if self.relative_destination:
                 destination += start 
