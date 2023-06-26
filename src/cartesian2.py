@@ -26,7 +26,7 @@ class Cartesian2:
     def __abs__(self):
         return (self.x**2 + self.y**2)**0.5
     def angle(self):
-        return math.atan((self.y/self.x))
+        return math.atan2(self.y,self.x)
     def __str__(self) -> str:
         return f'x = {self.x}, y={self.y}'
     
