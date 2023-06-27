@@ -225,8 +225,8 @@ class Airspace:
 
         if intruder_distance < restricted_distance:
             intruder_distance = intruder_distance
-            intruder_position = nearest_intruder.dynamic.position
-            intruder_velocity = nearest_intruder.dynamic.velocity
+            intruder_position = nearest_intruder.dynamic.position #type: ignore
+            intruder_velocity = nearest_intruder.dynamic.velocity #type: ignore
         elif intruder_distance > restricted_distance:
             intruder_distance = restricted_distance
             intruder_position = nearest_restricted
@@ -241,9 +241,9 @@ class Airspace:
 
         else:
             has_intruder = 1
-            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta  
+            angle_of_intruder = c2.Cartesian2.angle(intruder_position - aircraft.dynamic.position) - aircraft.dynamic.velocity.theta  #type: ignore
 
-            relative_velocity_of_intruder = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity))  
+            relative_velocity_of_intruder = ccs.toPolar(ccs.toCartesian(intruder_velocity) - ccs.toCartesian(aircraft.dynamic.velocity))  #type:ignore 
             heading_of_intruder = (
                 relative_velocity_of_intruder.theta - aircraft.dynamic.velocity.theta
             )
