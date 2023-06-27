@@ -22,8 +22,8 @@ class ConstantSpawnRateController():
         destinations = sm.ShapeManger.shapemanager()
 
         if is_mdp:
-            sources.addShape(cir.Circle.circle(c2.Cartesian2(0,0),1000,a=150))
-            destinations.addShape(cir.Circle.circle(c2.Cartesian2(0,0),2000,a=150))
+            sources.addShape(cir.Circle.circle(c2.Cartesian2(0,0),1000,r_dist=random.uniform(150,1000)))
+            destinations.addShape(cir.Circle.circle(c2.Cartesian2(0,0),2000,r_dist=random.uniform(150,1000))) 
         else:
             sources.addShape(rect.Rectangle.rectangle(c2.Cartesian2(0,boundary.y),c2.Cartesian2(boundary.x, 0)))
             destinations.addShape(rect.Rectangle.rectangle(c2.Cartesian2(0, boundary.y),c2.Cartesian2(boundary.x, 0)))
