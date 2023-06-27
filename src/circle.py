@@ -19,7 +19,7 @@ class Circle(abs_shp.AbstractShape):
     #factory function for standard circle 
     def circle(cls,center_point:c2.Cartesian2, radius:float,r_dist = random.uniform(0,1),angle_dist = random.uniform(0,2*math.pi), clip = False):
         assert radius >= 0 
-        #             using uniform dist choose a val between 0 and radius,  
+        r_dist = random.uniform(0, radius) if radius >= 1 else r_dist
         return cls(center_point, radius, r_dist, angle_dist,clip)
     
     def getNearestPointOnEdge(self, point:c2.Cartesian2) -> Tuple[c2.Cartesian2, float]:
