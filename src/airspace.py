@@ -64,8 +64,8 @@ class Airspace:
         waypoints: pf.PathFinder = pf.PathFinder.pathfinder_empty(),
         maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3, 2 * math.pi / 10),
         maximum_aircraft_speed:float=50,
-        detection_radius=1000,
-        arrival_radius=100,
+        detection_radius:float=1000,
+        arrival_radius:float=100,
         rng=random.Random(123),
         create_ego_aircraft: bool = True,
     ):
