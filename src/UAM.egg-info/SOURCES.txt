@@ -1,5 +1,3 @@
-LICENSE
-MANIFEST.in
 README.md
 setup.cfg
 setup.py
@@ -34,3 +32,15 @@ src/UAM.egg-info/PKG-INFO
 src/UAM.egg-info/SOURCES.txt
 src/UAM.egg-info/dependency_links.txt
 src/UAM.egg-info/top_level.txt
+tests/test_aircraft.py
+tests/test_airspace.py
+tests/test_alltest.py
+tests/test_cartesian2.py
+tests/test_convert_coordinate_system.py
+tests/test_dynamics.py
+tests/test_pilotfunction.py
+tests/test_polar2.py
+tests/test_shapemanager.py
+tests/test_shapes.py
+tests/test_spawncontroller.py
+tests/test_spawnfunction.py
