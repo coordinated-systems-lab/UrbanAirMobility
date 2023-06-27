@@ -63,7 +63,7 @@ class Airspace:
         restricted_areas: sm.ShapeManger = sm.ShapeManger.shapemanager(),
         waypoints: pf.PathFinder = pf.PathFinder.pathfinder_empty(),
         maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3, 2 * math.pi / 10),
-        maximum_aircraft_speed=50,
+        maximum_aircraft_speed:float=50,
         detection_radius=1000,
         arrival_radius=100,
         rng=random.Random(123),
