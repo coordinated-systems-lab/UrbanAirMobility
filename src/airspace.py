@@ -369,7 +369,7 @@ class Airspace:
         # kill arrived aircraft
         # kill aircraft far from ego - MDP only
         num_ac = len(self.all_aircraft)
-        print('number of aircraft in airspace: ', num_ac) #! delete after debugging 
+        #print('number of aircraft in airspace: ', num_ac) #! delete after debugging 
         list_ac = []
         for i in range(num_ac):
             # do not kill ego sim needs to end
@@ -381,7 +381,7 @@ class Airspace:
             # all others can be killed
             # kill if the ac has arrived or if we are MDP and it is far away from ego () the we dont need to simulate it)
             # if its arried locally, but not to its final destination, change its waypoint to the next waypoint
-            print('current i val -> ', i) #!delete after debugging
+            #print('current i val -> ', i) #!delete after debugging
             ac = self.all_aircraft[i]
             hasArrivedNext, hasArrivedFinal = ac.hasArrived(self.arrival_radius)
             if hasArrivedFinal:

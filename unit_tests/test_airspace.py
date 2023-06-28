@@ -35,7 +35,7 @@ t1 = aspc.Airspace.airspace(
 
 # TODO need to find why step is creating so many aircrafts in the airspaces
 t1.step(10, 0, 100)
-#print('test 3 -> aircrafts in airspace: ', len(t1.all_aircraft)) #* ->5730 aircrafts
+print('test 3 -> aircrafts in airspace: ', len(t1.all_aircraft)) #* ->5730 aircrafts
 
 # TODO -> assert len(t1.all_aircraft) == 11
 
@@ -79,3 +79,5 @@ t1 = aspc.Airspace.airspace()
 assert t1.getEgoState()[2] == 0
 t1.step(200, 0, 100)
 assert t1.getEgoState()[2] == 1
+
+print('Passed airspace test')
