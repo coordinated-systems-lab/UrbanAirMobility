@@ -42,9 +42,11 @@ class UAM_Env(gym.Env):
         
         # needs attention - fix observation space 
         self.observation_space = gym.spaces.Box(
-            low=self.airspace.boundary.x, 
+            low = np.array([-np.pi, 0, 0, 0, -np.pi, -np.pi, 0]), #! why should isIntruder be a value between 0 and 1 NEED TO CHECK 
+                            # deviation, own_vel, isIntruder, distance_to_intruder, angle_of_intruder, relative_heading_intruder, relative_vel_intruder
+            high = np.array([np.pi, self.airspace.maximum_aircraft_speed, 1, self.airspace.detection_radius, np.pi, np.pi, 2*self.airspace.maximum_aircraft_speed]), 
             
-            high=self.airspace.boundary.y, shape=(2,)
+            shape=(7,)
         )  
         
         # * make a wrapper that converts to discrete
@@ -102,10 +104,26 @@ class UAM_Env(gym.Env):
             airspace, is_MDP, pilot_function, rng, 0, max_time, time_step, nmac_distance
         )
 
+
+    #! Do we need a 'done' in return if we do add that to return signature of step 
     def step(
         self, action
-    ) -> Tuple[ObsType, float, bool, bool, dict, bool,]:
-        return observations, reward, terminated, truncated, info, done
+    ) -> Tuple[ObsType, float, bool, bool, dict,]:
+        
+        observations = 
+
+        reward = 
+
+        terminated = 
+
+        truncated = 
+
+        info = 
+
+
+
+
+        return observations, reward, terminated, truncated, info
 
     def reset(self, seed=None, options=None):
         pass
