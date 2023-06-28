@@ -103,7 +103,7 @@ class Airspace:
             c2.Cartesian2(0, 0),
             self.detection_radius,
             self.arrival_radius,
-            self.rng,
+            self.rng,   
         )
         initial_velocity = p2.Polar2(
             self.maximum_aircraft_speed / 2, np.pi * np.random.random_sample()
@@ -124,7 +124,7 @@ class Airspace:
 
         initial_velocity = p2.Polar2(
             self.maximum_aircraft_speed / 2, np.pi * np.random.random_sample()
-        )  #
+        )
         initial_acceleration = p2.Polar2(0.0, 0.0)
 
         ac = act.Aircraft.aircraft(
@@ -136,16 +136,16 @@ class Airspace:
         )
         self.all_aircraft.append(ac)
 
-    def findNearestIntruder(self, aircraft: act.Aircraft) -> Tuple[act.Aircraft | None, float]:
+    def findNearestIntruder(self, aircraft_under_observation: act.Aircraft) -> Tuple[act.Aircraft | None, float]:
         intruder_distance: float = self.detection_radius
         intruder = None 
 
         for possible_intruder in self.all_aircraft:
-            if possible_intruder == aircraft:
+            if possible_intruder == aircraft_under_observation:
                 continue
 
             distance_away: float = abs(
-                possible_intruder.dynamic.position - aircraft.dynamic.position
+                possible_intruder.dynamic.position - aircraft_under_observation.dynamic.position
             )
 
             if distance_away < intruder_distance:
@@ -155,7 +155,7 @@ class Airspace:
         return intruder, intruder_distance 
 
     def findNearestRestricted(
-        self, aircraft: act.Aircraft, restricted_areas: sm.ShapeManger, detection_radius
+        self, aircraft: act.Aircraft, restricted_areas: sm.ShapeManger, detection_radius #!might not need detection radius, check julia code base
     ):
         # * restricted_area is a shape manager type object built with factory function
         restricted_areas = (
@@ -218,7 +218,7 @@ class Airspace:
         # position = aircraft position, or the nearest point in the RA
         # velocity = ac velocity, or 0.0 for a RA
 
-        is_intruder = (
+        is_intruder = (                                     #!this logic of restricted_distance < detection_radius makes restricted area make a dummy aircraft
             intruder_distance < self.detection_radius
             or restricted_distance < self.detection_radius
         )
@@ -227,7 +227,7 @@ class Airspace:
             intruder_distance = intruder_distance
             intruder_position = nearest_intruder.dynamic.position #type: ignore
             intruder_velocity = nearest_intruder.dynamic.velocity #type: ignore
-        elif intruder_distance > restricted_distance:
+        elif intruder_distance > restricted_distance:      #!this logic of restricted_distance < detection_radius makes restricted area make a dummy aircraft
             intruder_distance = restricted_distance
             intruder_position = nearest_restricted
             intruder_velocity = p2.Polar2(0, 0)
