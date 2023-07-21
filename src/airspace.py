@@ -136,8 +136,9 @@ class Airspace:
         )
         self.all_aircraft.append(ac)
 
+    #* look at math
     def findNearestIntruder(self, aircraft_under_observation: act.Aircraft) -> Tuple[act.Aircraft | None, float]:
-        intruder_distance: float = self.detection_radius
+        intruder_distance: float = self.detection_radius #! det rad needs to collect 
         intruder = None 
 
         for possible_intruder in self.all_aircraft:
@@ -148,7 +149,7 @@ class Airspace:
                 possible_intruder.dynamic.position - aircraft_under_observation.dynamic.position
             )
 
-            if distance_away < intruder_distance:
+            if distance_away < intruder_distance:  
                 intruder = possible_intruder
                 intruder_distance = distance_away
 

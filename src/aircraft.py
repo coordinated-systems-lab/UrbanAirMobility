@@ -104,3 +104,9 @@ class Aircraft:
 
     def show(self):
         print(self.dynamic, ", Dest", self.destinations)
+
+    #for defining distance to destination 
+    def aircraft_stat(self):
+        dist_to_dest = self.destinations[-1] - self.dynamic.position
+        magnitude_dist = c2.Cartesian2.__abs__(dist_to_dest)
+        return magnitude_dist
