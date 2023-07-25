@@ -1,7 +1,7 @@
-import shapemanager as sman
-import circle
-import rectangle
-import cartesian2 as c2
+from modules import shapemanager as sman
+from modules import circle
+from modules import rectangle
+from modules import cartesian2 as c2
 
 
 sm = sman.ShapeManger.shapemanager()

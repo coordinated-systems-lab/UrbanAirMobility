@@ -2,15 +2,15 @@
 # create variables 
 import random
 import math
-import aircraft as acft
-import dynamics as dcs
-import shapemanager as shpmng 
-import rectangle as rtngl
-import circle
-import polar2 as p2
-import cartesian2 as c2
-import constantspawnratecontroller as cnstspwnctrl
-import queuedspawncontroller
+from modules import aircraft as acft
+from modules import dynamics as dcs
+from modules import shapemanager as shpmng 
+from modules import rectangle as rtngl
+from modules import circle
+from modules import polar2 as p2
+from modules import cartesian2 as c2
+from modules import constantspawnratecontroller as cnstspwnctrl
+from modules import queuedspawncontroller
 
 sources = shpmng.ShapeManger.shapemanager()
 dests = shpmng.ShapeManger.shapemanager()

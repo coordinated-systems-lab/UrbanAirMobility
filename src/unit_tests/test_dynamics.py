@@ -1,8 +1,8 @@
 from math import pi
-from dynamics import Dynamics
-from cartesian2 import Cartesian2
-from polar2 import Polar2
-from polar2 import Polar2
+from modules.dynamics import Dynamics
+from modules.cartesian2 import Cartesian2
+from modules.polar2 import Polar2
+from modules.polar2 import Polar2
 
 error = 0.001
 

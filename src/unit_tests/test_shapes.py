@@ -1,7 +1,7 @@
 import math
-import circle
-import rectangle
-import cartesian2 as c2
+from modules import circle
+from modules import rectangle
+from modules import cartesian2 as c2
 
 c = circle.Circle.circle(c2.Cartesian2(0,0), 1)
 

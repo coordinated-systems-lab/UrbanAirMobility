@@ -1,5 +1,5 @@
-from polar2 import Polar2 as P
 from math import pi as pi 
+from modules.polar2 import Polar2 as P
 
 error = 0.001 
 

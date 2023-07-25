@@ -1,5 +1,5 @@
 from math import pi as pi 
-from cartesian2 import Cartesian2 as Cartesian2
+from modules.cartesian2 import Cartesian2 as Cartesian2
 
 error = 0.00001
 

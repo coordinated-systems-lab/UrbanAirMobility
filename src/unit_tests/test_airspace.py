@@ -1,12 +1,12 @@
 import math
 import numpy as np
 import random
-import airspace as aspc
-import cartesian2 as c2
-import constantspawnratecontroller as cons_spwn_ctrlr
-import dynamics as dyn
-import shapemanager as shpmng
-import polar2 as p2
+from modules import airspace as aspc
+from modules import cartesian2 as c2
+from modules import constantspawnratecontroller as cons_spwn_ctrlr
+from modules import dynamics as dyn
+from modules import shapemanager as shpmng
+from modules import polar2 as p2
 
 rng = random.Random(123)
 

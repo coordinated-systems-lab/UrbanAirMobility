@@ -1,6 +1,6 @@
 from math import pi 
-import pilotfunction as pf
-from polar2 import Polar2
+from modules import pilotfunction as pf
+from modules.polar2 import Polar2
 
 
 # test 1

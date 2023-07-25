@@ -1,8 +1,8 @@
 #Test 1
 
 
-import cartesian2 as c2 
-import spawnfunction as spwnfnc
+from modules import cartesian2 as c2 
+from modules import spawnfunction as spwnfnc
 
 b = c2.Cartesian2(1000,1000)
 

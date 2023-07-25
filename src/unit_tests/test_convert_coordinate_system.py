@@ -1,7 +1,7 @@
 from math import pi
-import convertcoordinatesystem as ccs
-from cartesian2 import Cartesian2 
-from polar2 import Polar2
+from modules import convertcoordinatesystem as ccs
+from modules.cartesian2 import Cartesian2 
+from modules.polar2 import Polar2
 
 error = 0.00001
 
