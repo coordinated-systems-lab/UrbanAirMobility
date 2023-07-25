@@ -6,8 +6,9 @@ src/UAM.egg-info/SOURCES.txt
 src/UAM.egg-info/dependency_links.txt
 src/UAM.egg-info/top_level.txt
 src/experiment/random_test.py
-src/gym-examples/gym_examples/envs/__init__.py
-src/gym-examples/gym_examples/envs/uam_env.py
+src/gym_examples/__init__.py
+src/gym_examples/envs/__init__.py
+src/gym_examples/envs/uam_env.py
 src/modules/__init__.py
 src/modules/__main__.py
 src/modules/abstractshape.py
