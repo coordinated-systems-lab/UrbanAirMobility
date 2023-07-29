@@ -1,0 +1,8 @@
+name: AAM_AMOD
+channels:
+  - defaults
+dependencies:
+  - matplotlib
+  - numpy
+  - poetry
+prefix: /Users/aadit/miniconda3/envs/AAM_AMOD
