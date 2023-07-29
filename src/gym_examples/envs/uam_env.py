@@ -12,7 +12,7 @@ from modules import pilotfunction as pfunc, airspace as aspc, cartesian2 as c2, 
 # discrete state space
 # discrete action space
 class UAM_Env(gym.Env):
-    metadata = {"render_mode": ["human", "rgb_array"], "render_fps": 4}
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 4}
 
     def __init__(
         self,
@@ -63,24 +63,27 @@ class UAM_Env(gym.Env):
                             # deviation, own_vel, isIntruder, distance_to_intruder, angle_of_intruder, relative_heading_intruder, relative_vel_intruder
             high = np.array([np.pi, self.airspace.maximum_aircraft_speed, 1, self.airspace.detection_radius, np.pi, np.pi, 2*self.airspace.maximum_aircraft_speed]), 
             #! add the explanantion in readme for the choice of obs space parameters 
-            shape=(7,)
+            shape=(7,),
+            dtype=np.float64
         )  
         
         # * make a wrapper that converts to discrete
+        
         self.action_space = gym.spaces.Box(
             low=np.array(
                 [
-                    -self.airspace.maximum_aircraft_acceleration.r,
-                    -self.airspace.maximum_aircraft_acceleration.theta,
+                    -self.airspace.maximum_aircraft_acceleration.r / abs(self.airspace.maximum_aircraft_acceleration.r),
+                    -self.airspace.maximum_aircraft_acceleration.theta/ abs(self.airspace.maximum_aircraft_acceleration.theta),
                 ]
             ),
             high=np.array(
                 [
-                    self.airspace.maximum_aircraft_acceleration.r,
-                    self.airspace.maximum_aircraft_acceleration.theta,
+                    self.airspace.maximum_aircraft_acceleration.r/ abs(self.airspace.maximum_aircraft_acceleration.r),
+                    self.airspace.maximum_aircraft_acceleration.theta/ abs(self.airspace.maximum_aircraft_acceleration.theta),
                 ]
             ),
             shape=(2,),
+            dtype=np.float32
         )
         # comments below are from gymnasium 
         """
@@ -132,7 +135,7 @@ class UAM_Env(gym.Env):
     #         airspace, is_MDP, pilot_function, rng, 0, max_time, time_step, nmac_distance
     #     )
 
-    def _get_obs(self):
+    def _get_obs(self) :
         # ego agent state
         ego_agent_state = self.airspace.getEgoState()
         
@@ -196,10 +199,13 @@ class UAM_Env(gym.Env):
 
 
         return observations, reward, terminated, truncated, info
-
+    #TODO reset needs to return two items observation(type Obs) and info(type dict) 
     def reset(self, seed=None, options=None):
         self.airspace.reset()
         self.current_time = 0
+
+        observation = self._get_obs()
+        info = self._get_info()
 
     def render(self):
         pass
