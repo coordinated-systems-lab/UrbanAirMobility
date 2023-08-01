@@ -47,13 +47,13 @@ t1 = aspc.Airspace.airspace(
     boundary=c2.Cartesian2(10000,10000),
     create_ego_aircraft=False,
     spawn_controller=cons_spwn_ctrlr.ConstantSpawnRateController.constantspawnratecontroller(
-        c2.Cartesian2(10000, 10000), False, 36
+        c2.Cartesian2(10000, 10000), False, 3600/math.pi
     ),
 )
 
 t1.step(10, 0, 100)
 # TODO need to find why step is creating so many aircrafts in the airspace
-# print('aircrafts in airspace: ', len(t1.all_aircraft)) #* -> 360
+print('aircrafts in airspace: ', len(t1.all_aircraft)) #* -> 360
 
 # TODO assert len(t1.all_aircraft) == 10
 
