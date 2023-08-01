@@ -121,7 +121,7 @@ class Airspace:
         self.all_aircraft.append(ac)
 
     def createAircraft(self, source: c2.Cartesian2, destination: c2.Cartesian2):
-        destinations = pf.PathFinder.findPath(self.waypoints, source, destination, self.rng)  # type: ignore
+        destinations = pf.PathFinder.findPath(self.waypoints, source, destination, self.rng) 
 
         initial_velocity = p2.Polar2(
             self.maximum_aircraft_speed / 2, np.pi * np.random.random_sample()
@@ -139,7 +139,7 @@ class Airspace:
 
     #* look at math
     def findNearestIntruder(self, aircraft_under_observation: act.Aircraft) -> Tuple[act.Aircraft | None, float]:
-        intruder_distance: float = self.detection_radius #! det rad needs to collect 
+        intruder_distance: float = self.detection_radius
         intruder = None 
 
         for possible_intruder in self.all_aircraft:
