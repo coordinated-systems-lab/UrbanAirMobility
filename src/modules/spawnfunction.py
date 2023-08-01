@@ -7,11 +7,12 @@
 #that way we can use any package as needed
 
 import numpy as np
+import random
 from modules.cartesian2 import Cartesian2 as c2
 from modules.polar2 import Polar2 as p2
 import modules.convertcoordinatesystem as ccs
 
-def ego_spawn_function(boundary:c2, ego_location:c2, detection_radius, arrival_radius, rng = np.random.default_rng(123)): #why is this function using so many inputs when only one is being used
+def ego_spawn_function(boundary:c2, ego_location:c2, detection_radius, arrival_radius, rng = random.Random(123)): #why is this function using so many inputs when only one is being used
     init_x = rng.uniform(0,boundary.x) # need to check the data type, here init_x is float, julia outputs it to type rng
     init_y = rng.uniform(0,boundary.y) # same as before, chk data type of 'rng'
     
