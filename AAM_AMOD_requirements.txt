@@ -1,106 +1,109 @@
 absl-py==1.4.0
 ale-py==0.8.1
-attrs @ file:///Users/cbousseau/work/recipes/ci_py311/attrs_1677906550284/work
+attrs==22.1.0
 AutoROM==0.6.1
 AutoROM.accept-rom-license==0.6.1
 box2d-py==2.3.5
 brotlipy==0.7.0
-build @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_eavdok2epw/croot/python-build_1679596515715/work
-CacheControl @ file:///Users/cbousseau/work/recipes/ci_py311/cachecontrol_1677910203614/work
+build==0.10.0
+CacheControl==0.12.11
 cachetools==5.3.1
-certifi @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_5c4sjwommo/croot/certifi_1683875376620/work/certifi
-cffi @ file:///Users/cbousseau/work/recipes/ci_py311/cffi_1677903595907/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-cleo @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4b610d7o4q/croot/cleo_1679609997659/work
+certifi==2023.5.7
+cffi==1.15.1
+charset-normalizer==2.0.4
+cleo==2.0.1
 click==8.1.6
 cloudpickle==2.2.1
-contourpy @ file:///Users/cbousseau/work/recipes/ci_py311/contourpy_1677925208456/work
-crashtest @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_d5_qevdeyf/croot/crashtest_1679422380383/work
-cryptography @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4a_lrlt_rt/croot/cryptography_1686613068564/work
-cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
-distlib @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_bcnueub6e7/croot/distlib_1678983661379/work
-dulwich @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_73rnypnk3v/croot/dulwich_1679420046310/work
+contourpy==1.0.5
+crashtest==0.4.1
+cryptography==39.0.1
+cycler==0.11.0
+distlib==0.3.6
+dulwich==0.21.3
 Farama-Notifications==0.0.4
-filelock @ file:///Users/cbousseau/work/recipes/ci_py311/filelock_1677909105322/work
+filelock==3.9.0
 fonttools==4.25.0
 google-auth==2.22.0
 google-auth-oauthlib==1.0.0
 grpcio==1.56.2
 gymnasium==0.28.1
-html5lib @ file:///Users/ktietz/demo/mc3/conda-bld/html5lib_1629144453894/work
-idna @ file:///Users/cbousseau/work/recipes/ci_py311/idna_1677906072337/work
-importlib-metadata @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_84cgjb624t/croot/importlib-metadata_1678997087058/work
+html5lib==1.1
+idna==3.4
+importlib-metadata==6.0.0
 importlib-resources==6.0.0
-installer @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_dfr0jxtptv/croot/python-installer_1679433007995/work
-jaraco.classes @ file:///tmp/build/80754af9/jaraco.classes_1620983179379/work
+installer==0.6.0
+jaraco.classes==3.2.1
 jax-jumpy==1.0.0
 Jinja2==3.1.2
-jsonschema @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_2a92785vxi/croot/jsonschema_1678983423459/work
-keyring @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_8bd22k84zo/croot/keyring_1678999224442/work
-kiwisolver @ file:///Users/cbousseau/work/recipes/ci_py311/kiwisolver_1677925326358/work
+jsonschema==4.17.3
+keyring==23.13.1
+kiwisolver==1.4.4
 lockfile==0.12.2
 Markdown==3.4.4
 markdown-it-py==3.0.0
 MarkupSafe==2.1.3
-matplotlib @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_05rfi32zzb/croot/matplotlib-suite_1679593473526/work
+matplotlib==3.7.1
 mdurl==0.1.2
-more-itertools @ file:///tmp/build/80754af9/more-itertools_1637733554872/work
+more-itertools==8.12.0
 mpmath==1.3.0
-msgpack @ file:///Users/cbousseau/work/recipes/ci_py311/msgpack-python_1677909260136/work
+msgpack==1.0.3
 munkres==1.1.4
 networkx==3.1
-numpy @ file:///Users/cbousseau/work/recipes/ci_py311/numpy_and_numpy_base_1677921358445/work
+numpy==1.23.5
 oauthlib==3.2.2
 opencv-python==4.8.0.74
-packaging @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_e946luvhc3/croot/packaging_1678965323926/work
+packaging==23.0
 pandas==2.0.3
-pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
+pexpect==4.8.0
 Pillow==9.4.0
-pkginfo @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_d1oq9rhye6/croot/pkginfo_1679431178842/work
-platformdirs @ file:///Users/cbousseau/work/recipes/ci_py311/platformdirs_1677909443319/work
-poetry @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_a4w9mgpn7u/croot/poetry_1680193152754/work
-poetry-core @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_71omu6o5yb/croot/poetry-core_1680018661315/work
-poetry-plugin-export @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_c6nccc4wv0/croot/poetry-plugin-export_1680122804897/work
+pip==23.1.2
+pkginfo==1.9.6
+platformdirs==2.5.2
+poetry==1.4.0
+poetry-core==1.5.1
+poetry-plugin-export==1.3.0
 protobuf==4.23.4
 psutil==5.9.5
-ptyprocess @ file:///tmp/build/80754af9/ptyprocess_1609355006118/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl
+ptyprocess==0.7.0
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
+pycparser==2.21
 pygame==2.5.0
 Pygments==2.15.1
-pyOpenSSL @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_ddecjfxr7g/croot/pyopenssl_1678965309681/work
-pyparsing @ file:///Users/cbousseau/work/recipes/ci_py311/pyparsing_1677910832141/work
-pyproject_hooks @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_f43jw13ggf/croot/pyproject_hooks_1679584440474/work
-pyrsistent @ file:///Users/cbousseau/work/recipes/ci_py311/pyrsistent_1677909782145/work
-PySocks @ file:///Users/cbousseau/work/recipes/ci_py311/pysocks_1677906386870/work
-python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pyOpenSSL==23.0.0
+pyparsing==3.0.9
+pyproject_hooks==1.0.0
+pyrsistent==0.18.0
+PySocks==1.7.1
+python-dateutil==2.8.2
 pytz==2023.3
-rapidfuzz @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_24x93akdfk/croot/rapidfuzz_1679593472383/work
-requests @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_37wt8ycste/croot/requests_1682607533309/work
+rapidfuzz==2.13.7
+requests==2.29.0
 requests-oauthlib==1.3.1
-requests-toolbelt @ file:///Users/ktietz/demo/mc3/conda-bld/requests-toolbelt_1629456163440/work
+requests-toolbelt==0.9.1
 rich==13.4.2
 rsa==4.9
-shellingham @ file:///Users/cbousseau/work/recipes/ci_py311/shellingham_1677910973388/work
+setuptools==67.8.0
+shellingham==1.5.0
 Shimmy==0.2.1
-six @ file:///tmp/build/80754af9/six_1644875935023/work
+six==1.16.0
 stable-baselines3==2.0.0
 swig==4.1.1
 sympy==1.12
 tensorboard==2.13.0
 tensorboard-data-server==0.7.1
-tomlkit @ file:///Users/cbousseau/work/recipes/ci_py311/tomlkit_1677911131859/work
+tomlkit==0.11.1
 torch==2.0.1
-tornado @ file:///Users/cbousseau/work/recipes/ci_py311/tornado_1677913116168/work
+tornado==6.2
 tqdm==4.65.0
-trove-classifiers @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_e8b4s9j9g8/croot/trove-classifiers_1679610035254/work
+trove-classifiers==2023.3.9
 typing_extensions==4.6.3
 tzdata==2023.3
--e git+ssh://git@github.com/coordinated-systems-lab/UrbanAirMobility.git@0201d68bef3d7f0b2833ebdb882f3386e4de8ac8#egg=UAM
-urllib3 @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_e9usuw__8i/croot/urllib3_1686166332689/work
-virtualenv @ file:///Users/cbousseau/work/recipes/ci_py311_2/virtualenv_1678996150360/work
+UAM==0.0.1
+urllib3==1.26.16
+virtualenv==20.17.1
 webencodings==0.5.1
 Werkzeug==2.3.6
-xattr @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_58zgibraxh/croot/xattr_1679670682781/work
-zipp @ file:///Users/cbousseau/work/recipes/ci_py311/zipp_1677907997878/work
+wheel==0.38.4
+xattr==0.10.1
+zipp==3.11.0
