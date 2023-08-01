@@ -41,7 +41,7 @@ class ConstantSpawnRateController():
                                     current_time,
                                     aircraft:List[acft.Aircraft],
                                     ego_position:c2.Cartesian2,
-                                    rng = np.random.default_rng()):
+                                    rng = np.random.default_rng(123)):
         ac_to_spawn = int(self.spawnrate_per_second * timestep)  
 
         ret :List[Tuple[c2.Cartesian2, c2.Cartesian2]] = []
