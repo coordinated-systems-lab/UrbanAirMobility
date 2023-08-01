@@ -47,7 +47,7 @@ class PathFinder:
         return nearest_point_index
     
     
-    def findPath(self, start:c2, dest:c2, rng:Generator) -> List[c2] :
+    def findPath(self, start:c2, dest:c2, rng) -> List[c2] :
         
         if len(self.points) == 0:
             return [dest]   
