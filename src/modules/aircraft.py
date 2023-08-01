@@ -104,6 +104,8 @@ class Aircraft:
 
     #for defining distance to destination 
     def aircraft_stat(self):
+        aircraft_stat_dict = dict()
         dist_to_dest = self.destinations[-1] - self.dynamic.position
         magnitude_dist = c2.Cartesian2.__abs__(dist_to_dest)
-        return magnitude_dist
+        aircraft_stat_dict['distance to destination:'] = magnitude_dist
+        return aircraft_stat_dict
