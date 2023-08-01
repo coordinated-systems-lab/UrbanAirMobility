@@ -3,7 +3,7 @@ import random
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
-from typing import Tuple, Callable, Generator, Any
+from typing import Tuple, Callable, Generator, Any, Dict
 from gymnasium.spaces import Discrete
 
 from modules import pilotfunction as pfunc, airspace as aspc, cartesian2 as c2, constantspawnratecontroller as cnstspwnctrl, pathfinder as pf, polar2 as p2, shapemanager as shpmng
@@ -16,7 +16,8 @@ class UAM_Env(gym.Env):
 
     def __init__(
         self,
-        spawn_controller: cnstspwnctrl.ConstantSpawnRateController = cnstspwnctrl.ConstantSpawnRateController.constantspawnratecontroller(c2.Cartesian2(10000,10000), True),  #! this class will take is_MDP, and boundary as input in the factory definition
+        pilot_function : None | Callable = None,
+        spawn_controller: cnstspwnctrl.ConstantSpawnRateController = cnstspwnctrl.ConstantSpawnRateController.constantspawnratecontroller(c2.Cartesian2(10000,10000), True),  
         restricted_areas: shpmng.ShapeManger = shpmng.ShapeManger.shapemanager(),
         waypoints: pf.PathFinder = pf.PathFinder.pathfinder_empty(),
         current_time: float = 0,
@@ -25,7 +26,6 @@ class UAM_Env(gym.Env):
         maximum_aircraft_acceleration: p2.Polar2 = p2.Polar2(3, 2 * math.pi / 10),
         maximum_aircraft_speed: float = 50,
         detection_radius: float = 1000,
-        pilot_function: None | Callable = None,
         max_time: float = 3600,  # * this is sim time/ experiment time ??
         time_step: float = 1,  # * assuming this to be a timestep of 1 second ??
         arrival_distance: float = 100,
@@ -50,7 +50,6 @@ class UAM_Env(gym.Env):
         
         self.airspace = airspace
         self.is_MDP = is_MDP
-        self.pilot_function = pilot_function
         self.rng = rng
         self.current_time = current_time
         self.max_time = max_time
@@ -58,11 +57,13 @@ class UAM_Env(gym.Env):
         self.nmac_distance = nmac_distance
         
         # needs attention - fix observation space 
+        
+        
         self.observation_space = gym.spaces.Box(
-            low = np.array([-np.pi, 0, 0, 0, -np.pi, -np.pi, 0]), #! why should isIntruder be a value between 0 and 1 NEED TO CHECK 
+            low = np.array([-np.pi, 0, 0, 0, -np.pi, -np.pi, 0]),                                                                               #! why should isIntruder be a value between 0 and 1 NEED TO CHECK 
                             # deviation, own_vel, isIntruder, distance_to_intruder, angle_of_intruder, relative_heading_intruder, relative_vel_intruder
             high = np.array([np.pi, self.airspace.maximum_aircraft_speed, 1, self.airspace.detection_radius, np.pi, np.pi, 2*self.airspace.maximum_aircraft_speed]), 
-            #! add the explanantion in readme for the choice of obs space parameters 
+                                                                                                                                                #! add the explanantion in readme for the choice of obs space parameters 
             shape=(7,),
             dtype=np.float64
         )  
@@ -97,7 +98,7 @@ class UAM_Env(gym.Env):
         self.clock = None
     
     
-    #* The constructor has been commented - gym does not work with constructor for entry points
+    #* The constructor has been commented - Does gym envs not work with constructor for entry points ???
     # @classmethod
     # def uam_env(
     #     cls,
@@ -136,23 +137,30 @@ class UAM_Env(gym.Env):
     #     )
 
     def _get_obs(self) :
-        # ego agent state
         ego_agent_state = self.airspace.getEgoState()
-        
-        # current deviation
+        # deviation, 
         ego_deviation = ego_agent_state[0]
-        # current velocity
+        # own_vel, 
         ego_velocity = ego_agent_state[1]
-        # has intruder 
+        # isIntruder,
         ego_intruder = ego_agent_state[2]
+        # distance_to_intruder, 
+        ego_dist_intruder = ego_agent_state[3]
+        # angle_of_intruder, 
+        ego_angle_intruder = ego_agent_state[4]
+        # relative_heading_intruder, 
+        rel_heading_intruder = ego_agent_state[5]
+        # relative_vel_intruder
+        rel_vel_intruder = ego_agent_state[6]
+        # ego agent state
+        
 
         #dest location
-        dests = self.airspace.all_aircraft[0].destinations
-        
+        #dests = self.airspace.all_aircraft[0].destinations
         #look at aircraft, pull information from there 
-        return ego_deviation, ego_velocity, ego_intruder, dests
+        return np.array([ego_deviation, ego_velocity, ego_intruder, ego_dist_intruder, ego_angle_intruder, rel_heading_intruder, rel_vel_intruder])
     
-    def _get_info(self):
+    def _get_info(self) -> Dict:
         #distance to target 
         dist_dest = self.airspace.all_aircraft[0].aircraft_stat()
         return dist_dest
@@ -179,11 +187,35 @@ class UAM_Env(gym.Env):
         reward_sum *= self.time_step
         
         return reward_sum
-
-    #! Do we need a 'done' in return if we do add that to return signature of step 
+    
+    
     def step(
-        self, action
+        self,action
     ) -> Tuple[Any, float, bool, bool, dict,]:
+        
+        
+        #ego action 
+        assert self.is_MDP == True
+        action = p2.Polar2(action[0], action[1])
+        self.airspace.setEgoAcceleration(action)
+
+        #non-ego action
+        all_state = self.airspace.getAllStates()
+        all_action = []
+        #* when the step method is called by an algorithm from the stable baselines library
+        #* the step method will use actions from the action space defined in the init 
+
+        
+        for state in all_state:
+            action_non_ego = self.pilot_function(state, self.rng)
+            action_non_ego = p2.Polar2(action_non_ego[0], action_non_ego[1])
+            all_action.append(action_non_ego)
+        
+        self.airspace.setAllAccelerations(all_action)
+
+        self.airspace.step(self.time_step, self.current_time, self.nmac_distance)
+        self.current_time += self.time_step     
+
         
         observations = self._get_obs()
 
@@ -199,13 +231,17 @@ class UAM_Env(gym.Env):
 
 
         return observations, reward, terminated, truncated, info
-    #TODO reset needs to return two items observation(type Obs) and info(type dict) 
+    
+    
+     
     def reset(self, seed=None, options=None):
         self.airspace.reset()
         self.current_time = 0
 
         observation = self._get_obs()
         info = self._get_info()
+
+        return observation, info
 
     def render(self):
         pass
