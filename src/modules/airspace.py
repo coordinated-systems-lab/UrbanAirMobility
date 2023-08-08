@@ -377,13 +377,14 @@ class Airspace:
             # do not kill ego sim needs to end
             if self.create_ego_aircraft and (i == 0):
                 continue
-            if i > num_ac:
+            if i >= num_ac:
                 break
 
             # all others can be killed
             # kill if the ac has arrived or if we are MDP and it is far away from ego () the we dont need to simulate it)
             # if its arried locally, but not to its final destination, change its waypoint to the next waypoint
             #print('current i val -> ', i) #!delete after debugging
+            #print('number of aircraft in airspace: ', num_ac)
             ac = self.all_aircraft[i]
             hasArrivedNext, hasArrivedFinal = ac.hasArrived(self.arrival_radius)
             if hasArrivedFinal:
