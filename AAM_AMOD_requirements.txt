@@ -3,7 +3,7 @@ ale-py==0.8.1
 attrs==22.1.0
 AutoROM==0.6.1
 AutoROM.accept-rom-license==0.6.1
-box2d-py==2.3.5
+box2d-py==2.3.8
 brotlipy==0.7.0
 build==0.10.0
 CacheControl==0.12.11
