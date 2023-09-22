@@ -3,8 +3,11 @@ import random
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
+from stable_baselines3 import A2C, PPO
+from stable_baselines3.common.env_util import make_vec_env
 from typing import Tuple, Callable, Generator, Any, Dict
 from gymnasium.spaces import Discrete
+
 
 from modules import pilotfunction as pfunc, airspace as aspc, cartesian2 as c2, constantspawnratecontroller as cnstspwnctrl, pathfinder as pf, polar2 as p2, shapemanager as shpmng
 
@@ -46,6 +49,7 @@ class UAM_Env(gym.Env):
         )
         
         if pilot_function == None:
+            #self.pilot_function is a callable - pilot_fucntion is some_pilot_function from pilotfunction module
             self.pilot_function = pfunc.default_pilot_function(maximum_aircraft_acceleration)
         
         self.airspace = airspace
@@ -190,15 +194,21 @@ class UAM_Env(gym.Env):
     
     
     def step(
-        self,action
+        self,action_1, action_2=None
     ) -> Tuple[Any, float, bool, bool, dict,]:
         
         
         #ego action 
         assert self.is_MDP == True
-        action = p2.Polar2(action[0], action[1])
-        self.airspace.setEgoAcceleration(action)
-
+        action_1 = p2.Polar2(action_1[0], action_1[1])
+        self.airspace.setEgoAcceleration(action_1)
+        
+        #action_2 comes from second algo 
+        if action_2 is not None:
+            action_2 = p2.Polar2(action_2[0], action_2[1])
+       
+        
+        
         #non-ego action
         all_state = self.airspace.getAllStates()
         all_action = []
@@ -207,6 +217,12 @@ class UAM_Env(gym.Env):
 
         
         for state in all_state:
+            if (action_2 is not None) and (state == all_state[0]): 
+                #next_to_ego action 
+                all_action.append(action_2)
+                continue 
+         
+            #                     pilot_function is some_pilot_function 
             action_non_ego = self.pilot_function(state, self.rng)
             action_non_ego = p2.Polar2(action_non_ego[0], action_non_ego[1])
             all_action.append(action_non_ego)
@@ -232,7 +248,7 @@ class UAM_Env(gym.Env):
 
         return observations, reward, terminated, truncated, info
     
-    
+        
      
     def reset(self, seed=None, options=None):
         self.airspace.reset()
@@ -248,3 +264,48 @@ class UAM_Env(gym.Env):
 
     def close(self):
         pass
+
+
+# Training and Testing in module script 
+env = UAM_Env()
+vec_env = make_vec_env(UAM_Env, n_envs=1)
+
+model_a2c = A2C("MlpPolicy", env, verbose=1).learn(5)
+print("A2C training complete")
+model_ppo = PPO("MlpPolicy", env, verbose=1, n_steps=32, n_epochs=2).learn(5)
+print("PPO training complete")
+
+obs = vec_env.reset()
+
+
+n_step = 5
+
+for step in range(n_step):
+    action_1, _ = model_a2c.predict(obs, deterministic=True)
+    action_2, _ = model_ppo.predict(obs,deterministic=True)
+    print(f"Step {step +1}")
+    print("Action ego: ", action_1)
+    print("Action next to ego: ", action_2)
+    
+    if action_1.shape == (1,2):
+        action_1 = action_1[0]
+    else:
+        action_1 = action_1
+    print(action_1.shape)
+    
+    if action_2.shape == (1,2):
+        action_2 = action_2[0]
+    else:
+        action_2 = action_2
+    print(action_2.shape)
+    obs, reward, terminated, truncated, info = env.step(action_1, action_2)
+    # vec_env is UAM_Env obj          step is from UAM_Env class 
+    
+    print("obs= ", obs, "reward= ", reward, "terminated= ", terminated, "truncated= ", truncated)
+    
+    if terminated:
+        print("Goal reached!", "reward= ", reward)
+        break
+    elif truncated:
+        print("Truncated for test step completion")
+        break
