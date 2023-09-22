@@ -257,5 +257,7 @@ ray.init()
 
 algo = ppo.PPO(env=UAM_Env, config={"env_config": {}})
 
-while True:
+for _ in range(5):
     print(algo.train())
+    
+algo.evaluate()
