@@ -3,3 +3,4 @@
 __pycache__
 .DS_Store
 scratch_pad.py
+gym_examples/envs/testing_mpl.py
